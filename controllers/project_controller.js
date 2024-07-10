@@ -1,9 +1,16 @@
 import { projectModel } from "../models/project_model.js";
 
+import { projectSchema } from "../schema/projects_schema.js";
 
 // Endpoints to post projects
 export const postProject = async (req, res) => {
     try {
+
+        const { error } = projectSchema.validate(req.body);
+        if (error) {
+            return res.status(400).send(error.details[0].message );
+        }
+
 
         const newProject = new projectModel(req.body);
         await newProject.save();
@@ -39,9 +46,9 @@ export const getProjects = async (req, res, next) => {
 
 export const getOneProject = async (req, res, next) => {
     try {
-        const getOneProject = await projectModel.findById(req.params.id)
+        const getSingleProject = await projectModel.findById(req.params.id)
         console.log(`Project with ID ${req.params.id} has been retrieved`)
-        res.status(200).json(getOneProject);
+        res.status(200).json(getSingleProject);
 
     } catch (error) {
         next(error)
@@ -52,7 +59,11 @@ export const getOneProject = async (req, res, next) => {
 
 export const updateProject = async (req, res, next) => {
     try {
-
+        const { error } = projectSchema.validate(req.body);
+        if (error) {
+            return res.status(400).send(error.details[0].message );
+        }
+        
         const updateProject = await projectModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json(updateProject);
 
@@ -63,7 +74,7 @@ export const updateProject = async (req, res, next) => {
 
 
 // Endpoint to delete an event with a unique id
-export const deleteProjects = async (req, res, next) => {
+export const deleteProject = async (req, res, next) => {
     try {
         const deleteProject = await projectModel.findByIdAndDelete(req.params.id);
         if (!deleteProject) {
