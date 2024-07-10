@@ -1,6 +1,6 @@
 import joi from "joi";
 
-const educationSchema = joi.object(
+export const educationSchema = joi.object(
     {
         instutionName: joi.string().required(),
         location: joi.string(),
