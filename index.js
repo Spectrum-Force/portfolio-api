@@ -1,5 +1,5 @@
 import express from "express";
-import { dbConnection } from "./config/db";
+import { dbConnection } from "./config/db.js";
 
 // Create the express app
 const userApp = express();
