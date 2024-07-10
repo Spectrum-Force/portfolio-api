@@ -1,8 +1,8 @@
-import joi, { link }  from "joi";
+import joi from "joi";
 
 
-const projectSchema = joi.object({
-    
+export const projectSchema = joi.object({
+
     projectName: joi.string(),
     description: joi.string(),
     contributors: joi.string(),
