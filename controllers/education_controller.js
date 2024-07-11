@@ -1,12 +1,12 @@
 import { educationModel } from "./educationModel.js";
-import { educcationSchema } from "./educationSchema.js";
+import { educationSchema} from "./educationSchema.js";
 
 
 // Endpoints to post education
 export const postEducation = async (req, res, next) => {
     try {
 
-        const { error, value } = educcationSchema.validate(req.body);
+        const { error, value } = educationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
@@ -53,7 +53,7 @@ export const getSingleEducation = async (req, res, next) => {
 export const updateEducation = async (req, res, next) => {
     try {
 
-        const { error } = educcationSchema.validate(req.body);
+        const { error } = educationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
