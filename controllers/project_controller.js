@@ -27,15 +27,22 @@ export const getProjects = async (req, res, next) => {
     try {
         const {
             filter = "{}",
-            sort = "{}" } = req.query
+            sort = "{}",
+            skip = 0,
+            limit = 10,
+            fields = "{}",
+        } = req.query
 
         // get all projects from the database
         const allProjects = await projectModel
             .find(JSON.parse(filter))
             .sort(JSON.parse(sort))
-            .select(JSON.parse(select));
+            .select(JSON.parse(select))
+            .skip(JSON.parse(skip))
+            .limit(JSON.parse(limit))
+            .select(JSON.parse(fields));
 
-        res.status(200).json(allProjects);
+        res.status(200).json('All projects have been retrieved');
     } catch (error) {
         next(error)
     }
