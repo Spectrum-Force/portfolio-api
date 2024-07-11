@@ -4,10 +4,10 @@ import { postEducation, getEducation, deleteEducation, updateEducation, getSingl
 
 const educationRouter = Router();
 
-educationRouter.post("/education", postEducation);
-educationRouter.get("/education", getEducation);
-educationRouter.delete("/education/:id", deleteEducation);
-educationRouter.patch("/education/:id", updateEducation);
-educationRouter.get("/education/:id", getSingleEducation);
+educationRouter.post("/users/education", postEducation);
+educationRouter.get("/users/education", getEducation);
+educationRouter.delete("/users/education/:id", deleteEducation);
+educationRouter.patch("/users/education/:id", updateEducation);
+educationRouter.get("/users/education/:id", getSingleEducation);
 
 export default educationRouter;
