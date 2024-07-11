@@ -24,28 +24,17 @@ export const postProject = async (req, res) => {
 // Endpoint to get all projects
 export const getProjects = async (req, res, next) => {
     try {
-        const {
-            filter = "{}",
-            sort = "{}",
-            skip = 0,
-            limit = 10,
-            fields = "{}",
-        } = req.query
+                // get all projects from the database
+        const allProjects = await projectModel.find()
+            if (allProjects.length === 0) {
+                return res.status(404).send('No projects found')
+            }
 
-        // get all projects from the database
-        const allProjects = await projectModel
-            .find(JSON.parse(filter))
-            .sort(JSON.parse(sort))
-            .select(JSON.parse(select))
-            .skip(JSON.parse(skip))
-            .limit(JSON.parse(limit))
-            .select(JSON.parse(fields));
-
-        res.status(200).json('All projects have been retrieved');
+        res.status(200).json({ projects: allProjects });
     } catch (error) {
         next(error)
     }
-}
+};
 
 
 // Endpoint to get an event with a unique id

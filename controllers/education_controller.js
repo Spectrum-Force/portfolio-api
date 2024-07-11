@@ -24,26 +24,16 @@ export const postEducation = async (req, res, next) => {
 export const getEducation = async (req, res, next) => {
     try {
 
-        const {
-            filter = "{}",
-            sort = "{}",
-            skip = 0,
-            limit = 10,
-            fields = "{}",
-        } = req.query;
-
-        const education = await educationModel.find(JSON.parse(filter))
-            .sort(JSON.parse(sort))
-            .skip(skip)
-            .limit(limit)
-            .select(JSON.parse(fields));
-
-        res.status(200).json('Education retrieved successfully');
+        const alleducation = await educationModel.find()
+        if (alleducation.length === 0) {
+            return res.status(404).send('Education not found');
+        }
+        res.status(200).json({education: alleducation});
 
     } catch (error) {
         next(error);
     }
-}
+};
 
 // Endpoint to get a single education
 export const getSingleEducation = async (req, res, next) => {
