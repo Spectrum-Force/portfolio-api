@@ -6,15 +6,14 @@ import { projectSchema } from "../schema/projects_schema.js";
 export const postProject = async (req, res) => {
     try {
 
-        const { error } = projectSchema.validate(req.body);
+        const { error, value } = projectSchema.validate(req.body);
         if (error) {
-            return res.status(400).send(error.details[0].message );
+            return res.status(400).send(error.details[0].message);
         }
+        console.log('value', value);
 
-
-        const newProject = new projectModel(req.body);
-        await newProject.save();
-        res.status(201).json(newProject);
+        const newProject = await projectModel(value);
+        res.status(201).json({project: newProject});
 
 
     } catch (error) {
@@ -68,9 +67,9 @@ export const updateProject = async (req, res, next) => {
     try {
         const { error } = projectSchema.validate(req.body);
         if (error) {
-            return res.status(400).send(error.details[0].message );
+            return res.status(400).send(error.details[0].message);
         }
-        
+
         const updateProject = await projectModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.json(updateProject);
 
@@ -87,8 +86,8 @@ export const deleteProject = async (req, res, next) => {
         if (!deleteProject) {
             return res.status(404).json({ message: "Project not found" });
         }
-        res.status(200).json({message: "Project deleted successfully"});
-        
+        res.status(200).json({ message: "Project deleted successfully" });
+
     } catch (error) {
         next(error)
     }

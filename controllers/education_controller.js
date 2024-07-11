@@ -6,14 +6,14 @@ import { educcationSchema } from "./educationSchema.js";
 export const postEducation = async (req, res, next) => {
     try {
 
-        const { error } = educcationSchema.validate(req.body);
+        const { error, value } = educcationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
+        console.log('value', value)
 
-        const newEducation = new educationModel(req.body);
-        await newEducation.save();
-        res.status(201).json('Education added successfully');
+        const newEducation = await educationModel(value);
+        res.status(201).json({ education: newEducation });
 
     } catch (error) {
         next(error);
@@ -57,18 +57,18 @@ export const getSingleEducation = async (req, res, next) => {
         next(error);
     }
 }
-    
+
 
 // Endpoint to update the details of an education
 export const updateEducation = async (req, res, next) => {
     try {
-        
-        const {error} = educcationSchema.validate(req.body);
-        if(error){
+
+        const { error } = educcationSchema.validate(req.body);
+        if (error) {
             return res.status(400).send(error.details[0].message);
         }
 
-        const updateEducation = await educationModel.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        const updateEducation = await educationModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
         res.status(200).json('Education updated successfully');
 
 
@@ -76,14 +76,14 @@ export const updateEducation = async (req, res, next) => {
         next(error);
     }
 }
-    
+
 
 // Endpoint to delete an education
 export const deleteEducation = async (req, res, next) => {
     try {
-        
+
         const deleteEducation = await educationModel.findByIdAndDelete(req.params.id);
-        if(!deleteEducation){
+        if (!deleteEducation) {
             return res.status(404).send('Education not found');
         }
         res.status(200).json('Education deleted successfully');
