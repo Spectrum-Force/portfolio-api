@@ -4,10 +4,10 @@ import { addExperience, getExperience, getSingleExperience,updateExperience, del
 
 const experienceRouter = Router();
 
-experienceRouter.get("/experience", getExperience);
-experienceRouter.get("/experience/:id", getSingleExperience);
-experienceRouter.post("/experience", addExperience);
-experienceRouter.patch("/experience/:id", updateExperience);
-experienceRouter.delete("/experience/:id", deleteExperience);
+experienceRouter.get("/user/experience", getExperience);
+experienceRouter.get("/user/experience/:id", getSingleExperience);
+experienceRouter.post("/user/experience", addExperience);
+experienceRouter.patch("/user/experience/:id", updateExperience);
+experienceRouter.delete("/user/experience/:id", deleteExperience);
 
 export default experienceRouter;

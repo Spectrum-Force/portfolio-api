@@ -1,44 +1,58 @@
 import { expereinceModel } from "./expereinceModel.js"
+import { userModel } from "./userModel.js"
 import { expereinceSchema } from "./expereinceSchema.js"
 
 
 // Endpoints to post experience
-export const addExperience = async (req, res, next) => {
+export const addExperience = async (req, res) => {
     try {
         const { error, value } = expereinceSchema.validate(req.body)
         if (error) {
             return res.status(400).send(error.details[0].message)
         }
-        console.log('value', value)
 
         const newExpereince = new expereinceModel(value);
+
+        const User = await userModel.findById(value.user);
+        if (!User) {
+            return res.status(404).send('User not found')
+        }
+
+        User.experience.push(newExpereince._id);
+        await newExpereince.save();
+
         res.status(201).json({ experience: newExpereince });
 
     }
 
     catch (error) {
-        next(error)
+        return res.status(500).send(error)
     }
 }
 
 // Endpoint to get all experience
-export const getExperience = async (req, res, next) => {
+export const getExperience = async (req, res) => {
     try {
 
-        const allExperience = await expereinceModel.find()
-        if (alleducation.length === 0) {
+        const userId = req.params.id;
+        const allExperience = await expereinceModel.find({ user: userId })
+
+        if (allExperience.length === 0) {
             return res.status(404).send('No experience found')
         }
+
         res.status(200).json({ experience: allExperience })
 
 
+
     } catch (error) {
-        next(error)
+        return res.status(500).send(error)
     }
 }
 
+
 // Endpoint to get a single experience
-export const getSingleExperience = async (req, res, next) => {
+export const getSingleExperience = async (req, res) => {
     try {
 
         const getSingleExperience = await expereinceModel.findById(req.params.id);
@@ -48,7 +62,7 @@ export const getSingleExperience = async (req, res, next) => {
         res.status(200).json({ experience: getSingleExperience })
 
     } catch (error) {
-        next(error)
+        return res.status(500).send(error)
     }
 }
 
