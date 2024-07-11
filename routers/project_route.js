@@ -3,10 +3,10 @@ import { postProject, getProjects, getOneProject, deleteProject, updateProject }
 
 const projectRouter = Router();
 
-projectRouter.post("/projects", postProject);
-projectRouter.get("/projects", getProjects);
-projectRouter.get("projects/:id", getOneProject);
-projectRouter.delete("projects/:id", deleteProject);
-projectRouter.patch("projects/:id", updateProject);
+projectRouter.post("/user/projects", postProject);
+projectRouter.get("/user/projects", getProjects);
+projectRouter.get("/user/projects/:id", getOneProject);
+projectRouter.delete("/user/projects/:id", deleteProject);
+projectRouter.patch("/user/projects/:id", updateProject);
 
 export default projectRouter;
