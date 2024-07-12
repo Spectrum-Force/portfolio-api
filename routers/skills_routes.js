@@ -10,3 +10,5 @@ skillRouter.get('/skills/:id', getOneSkill);
 skillRouter.post('/skills', addSkill);
 skillRouter.patch('/skills/:id', patchSkill);
 skillRouter.delete('/skills/:id', deleteSkill);
+
+export default skillRouter

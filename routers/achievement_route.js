@@ -9,3 +9,5 @@ achievementRouter.get('/achievements/:id', getOneAchievement);
 achievementRouter.post('/achievements', addAchievement);
 achievementRouter.patch('/achievements/:id', patchAchievement);
 achievementRouter.delete('/achievements/:id', deleteAchievement);
+
+export default achievementRouter
