@@ -1,28 +1,20 @@
-import { educationModel } from "./educationModel.js";
-import { User } from "./userModel.js";
-import { educcationSchema } from "./educationSchema.js";
+import { educationModel } from "../models/education_model.js";
+import { educationSchema } from "../schema/education_schema.js";
+
+
 
 
 // Endpoints to post education
 export const postEducation = async (req, res) => {
     try {
 
-        const { error, value } = educcationSchema.validate(req.body);
+        const { error, value } = educationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
 
 
-        const newEducation = await educationModel(value);
-
-        const user = await User.findById(value.user);
-        if (!user) {
-            return res.status(404).send('User not found');
-        }
-
-        user.education.push(newEducation._id);
-        await user.save();
-
+        const newEducation = await educationModel.create(value);
         res.status(201).json({ education: newEducation });
 
     } catch (error) {
@@ -65,7 +57,7 @@ export const getSingleEducation = async (req, res) => {
 export const updateEducation = async (req, res, next) => {
     try {
 
-        const { error } = educcationSchema.validate(req.body);
+        const { error } = educationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
