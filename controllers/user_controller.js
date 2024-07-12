@@ -33,3 +33,22 @@ export const signup = async (req, res) => {
         return res.status(201).send(addUser)
     }
 }
+
+// Function to get the details of a particular user
+export const getUser = async (req, res, next) => {
+    // we are fetching all users
+    try {
+        const userId = req.params.id
+
+        //get user based on the user id
+        //use the select to exclude the password
+        //use populate to populate the education
+        const userDetails = await userModel.findById(userId)
+        .select('-password')
+        .populate('education')
+        
+        return res.status(201).json({user: userDetails})
+    } catch (error) {
+        next(error)
+    }
+}
