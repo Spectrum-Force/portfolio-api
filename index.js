@@ -1,4 +1,6 @@
 import express from "express";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 import { dbConnection } from "./config/db.js";
 import { userRouter } from "./routers/user_routes.js";
 import achievementRouter from "./routers/achievement_route.js";
@@ -11,13 +13,25 @@ const userApp = express();
 
 
 // Connect to the database
-dbConnection()
+dbConnection();
 
-userApp.use(express.json())
+// Apply middlewares
+userApp.use(express.json());
+userApp.use(session({
+    secret: process.env.SESSION_SECRET, //encrypts the file
+    resave: false,
+    saveUninitialized: true,
+    // cookie: {secure: true}
+    store: MongoStore.create({
+        mongoUrl: process.env.mongo_url
+    })
+}));
+
+// Use routes
 userApp.use('/api/v1', userRouter)
+userApp.use('/api/v1', educationRouter)
 userApp.use('/user/achievements', achievementRouter)
 userApp.use('/user/skills', skillRouter)
-userApp.use('/user/education', educationRouter)
 userApp.use('/user/projects', projectRouter)
 
 // Listen for incoming requests

@@ -34,6 +34,35 @@ export const signup = async (req, res) => {
     }
 }
 
+export const login = async (req, res, next) => {
+    try {
+        const {email, userName} = req.body
+        // Find a user using their unique identifier
+        const user = await userModel.findOne({
+            $or: [
+                {email: email},
+                {username: userName}
+            ]
+        });
+        if (!user) {
+            return res.status(401).json('No user found')
+        } else {
+            // Verify their password
+            const correctPassword = bcrypt.compareSync(req.body.password, user.password);
+            if(!correctPassword) {
+                res.status(401).json('Invalid credentials')
+            } else {
+                // Generate a session for them
+                req.session.user = {id: user.id}
+                // Return response
+                res.status(200).json('Login successful')
+            }
+        }
+    } catch (error) {
+        next(error);
+    }
+ }
+
 // Function to get the details of a particular user
 export const getUser = async (req, res, next) => {
     // we are fetching all users
@@ -52,3 +81,27 @@ export const getUser = async (req, res, next) => {
         next(error)
     }
 }
+
+export const logout = async (req, res, next) => {
+    try {
+        // Destroy user session
+        await req.session.destroy();
+        // Return response
+        res.status(200).json('Logout successful')
+    } catch (error) {
+        next(error);
+    }
+ }
+
+export const profile = async (req, res, next) => {
+    try {
+        // Find a user by id
+        const user = await userModel
+        .findById(req.session.user.id)
+        .select({password: false});
+        // Return response
+        res.status(200).json(user)
+    } catch (error) {
+        next(error);
+    }
+ }
