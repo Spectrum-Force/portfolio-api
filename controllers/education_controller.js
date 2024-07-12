@@ -1,5 +1,7 @@
-import { educationModel } from "./educationModel.js";
-import { educationSchema} from "./educationSchema.js";
+import { educationModel } from "../models/education_model.js";
+import { educationSchema } from "../schema/education_schema.js";
+
+
 
 
 // Endpoints to post education
@@ -12,7 +14,7 @@ export const postEducation = async (req, res, next) => {
         }
         console.log('value', value)
 
-        const newEducation = await educationModel(value);
+        const newEducation = await educationModel.create(value);
         res.status(201).json({ education: newEducation });
 
     } catch (error) {
