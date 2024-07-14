@@ -2,12 +2,17 @@ import { Router } from "express";
 
 import { addUserProfile, getUserProfile, updateUserProfile, deleteUserProfile } from "../controllers/userProfile_controller.js";
 
+import { checkUserSession } from "../middleware/auth.js";
+
 
 const userProfileRouter = Router();
 
-userProfileRouter.post("/user/profile", addUserProfile);
-userProfileRouter.get("/user/profile/:id", getUserProfile);
-userProfileRouter.put("/user/profile/:id", updateUserProfile);
-userProfileRouter.delete("/user/profile/:id", deleteUserProfile);
+userProfileRouter.post("/users/profile", checkUserSession, addUserProfile);
+
+userProfileRouter.get("/users/profile/:id", getUserProfile);
+
+userProfileRouter.patch("/users/profile/:id", checkUserSession, updateUserProfile);
+
+userProfileRouter.delete("/users/profile/:id", checkUserSession, deleteUserProfile);
 
 export default userProfileRouter;

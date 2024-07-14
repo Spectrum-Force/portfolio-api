@@ -12,18 +12,26 @@ export const addUserProfile = async (req, res) => {
         return res.status(400).send(error.details[0].message);
     }
 
-    const newUserProfile = await userProfileModel.create(value)
+    
 
     // Check if the user exists
-    const user = await User.findById(value.user);
+    const userSessionId = req.session.user.id;
+
+    const user = await User.findById(userSessionId);
     if (!user) {
         return res.status(404).send('User not found');
     }
+    
+    const newUserProfile = await userProfileModel.create(value)
 
-    user.userProfile.push(newUserProfile._id);
+    // object.assign.newUserProfile
+    user.userProfile = newUserProfile._id;
+    // user.userProfile.push(newUserProfile._id);
 
     await user.save();
-    res.status(201).send(newUserProfile);
+
+    res.status(201).json({ newUserProfile});
+
     } catch (error) {
         return res.status(500).send(error);
     }
@@ -51,9 +59,13 @@ export const updateUserProfile = async (req, res) => {
    
     try {
         const { error, value } = userProfileSchema.validate(req.body);
-    if (error) return res.status(400).send(error.details[0].message);
+    if (error) {
+        return res.status(400).send(error.details[0].message);
+    }
 
-    const updatedUserProfile = await userProfileModel.findByIdAndUpdate(req.params.id, value);
+    const userSessionId = req.session.user.id;
+
+    const updatedUserProfile = await userProfileModel.findByIdAndUpdate(userSessionId);
         if (!updatedUserProfile) {
             return res.status(404).send('UserProfile not found');
         }
