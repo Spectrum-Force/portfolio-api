@@ -11,10 +11,25 @@ export const postProject = async (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
 
+        console.log('userId', req.session.user.id);
 
-        const newProject = new projectModel(req.body);
-        await newProject.save();
-        res.status(201).json(newProject);
+        const userSessionId = req.session.user.id;
+
+        const user = await User.findById(userSessionId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const project = await projectModel.create({
+            ...value,
+            user: userSessionId
+        });
+
+        user.education.push(project._id);
+        await user.save();
+
+        res.status(201).json({ project });
 
 
     } catch (error) {
@@ -25,17 +40,15 @@ export const postProject = async (req, res) => {
 // Endpoint to get all projects
 export const getProjects = async (req, res) => {
     try {
-        const {
-            filter = "{}",
-            sort = "{}" } = req.query
 
-        // get all projects from the database
-        const allProjects = await projectModel
-            .find(JSON.parse(filter))
-            .sort(JSON.parse(sort))
-            .select(JSON.parse(select));
+        const userSessionId = req.session.user.id
+        const allProjects = await projectModel.find({ user: userSessionId });
 
-        res.status(200).json(allProjects);
+        if (allProjects.length == 0) {
+            return res.status(404).json({ message: "No projects found" });
+        }
+        res.staus(200).json({project: allProjects});
+
     } catch (error) {
         return res.status(400).send(error);
     }
