@@ -1,7 +1,5 @@
 import { educationModel } from "./educationModel.js";
-import { User } from "./userModel.js";
 import { educcationSchema } from "./educationSchema.js";
-import { get } from "mongoose";
 
 
 // Endpoints to post education
@@ -9,7 +7,6 @@ export const postEducation = async (req, res) => {
     try {
 
         const { error, value } = educcationSchema.validate(req.body);
-        // Validate the request body against the education schema
         if (error) {
 
             return res.status(400).send(error.details[0].message);
@@ -80,7 +77,7 @@ export const getSingleEducation = async (req, res) => {
 export const updateEducation = async (req, res, next) => {
     try {
 
-        const { error } = educcationSchema.validate(req.body);
+        const { error } = educationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
