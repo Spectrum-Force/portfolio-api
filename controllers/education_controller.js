@@ -1,6 +1,7 @@
 import { educationModel } from "./educationModel.js";
 import { User } from "./userModel.js";
 import { educcationSchema } from "./educationSchema.js";
+import { get } from "mongoose";
 
 
 // Endpoints to post education
@@ -8,35 +9,50 @@ export const postEducation = async (req, res) => {
     try {
 
         const { error, value } = educcationSchema.validate(req.body);
+        // Validate the request body against the education schema
         if (error) {
+
             return res.status(400).send(error.details[0].message);
         }
 
+        console.log('userId', req.session.user.id);
+        // Log the user ID from the session
 
-        const newEducation = await educationModel(value);
+        const userSessionId = req.session.user.id;
 
-        const user = await User.findById(value.user);
+
+
+
+        const user = await User.findById(userSessionId);
+        // Find the user in the database using the user ID from the session
         if (!user) {
             return res.status(404).send('User not found');
         }
 
-        user.education.push(newEducation._id);
-        await user.save();
+        const education = await educationModel.create({ ...value, user: userSessionId });
+        
+        user.education.push(education._id);
 
-        res.status(201).json({ education: newEducation });
+        // Add the ID of the newly created education document to the user's education array
+        await user.save();
+        
+
+        res.status(201).json({ education });
+        
 
     } catch (error) {
         return res.status(500).send(error);
     }
+
 }
 
 // Endpoint to get all education
 export const getEducation = async (req, res) => {
     try {
 
-        const userId =  req.params.id;
-        const alleducation = await educationModel.find({user: userId});
-        
+        const userSessionId = req.session.user.id;
+        const alleducation = await educationModel.find({ user: userSessionId });
+
         if (alleducation.length === 0) {
             return res.status(404).send('No education added');
         }
@@ -50,11 +66,10 @@ export const getEducation = async (req, res) => {
 // Endpoint to get a single education
 export const getSingleEducation = async (req, res) => {
     try {
-        const getSingleEducation = await educationModel.findById(req.params.id);
-        if (!getSingleEducation) {
-            return res.status(404).send('Education not found');
-        }
-        res.status(200).json('Education retrieved successfully');
+        const getSingleEducation = await educationModel.findById(req.params.id, req.body, { new: true });
+        
+        res.status(200).json(getSingleEducation);
+
     } catch (error) {
         next(error);
     }
@@ -71,7 +86,7 @@ export const updateEducation = async (req, res, next) => {
         }
 
         const updateEducation = await educationModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json('Education updated successfully');
+        res.status(200).json(updateEducation);
 
 
     } catch (error) {
