@@ -11,17 +11,10 @@ export const postProject = async (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
 
-        const newProject = await projectModel.create(value);
 
-        const user = await User.findById(value.user);
-        if (!user) {
-            return res.status(404).json({ message: "User not found" });
-        }
-
-        user.projects.push(newProject._id);
-        await user.save();
-
-        res.status(201).json({ newProject });
+        const newProject = new projectModel(req.body);
+        await newProject.save();
+        res.status(201).json(newProject);
 
 
     } catch (error) {
@@ -32,20 +25,21 @@ export const postProject = async (req, res) => {
 // Endpoint to get all projects
 export const getProjects = async (req, res) => {
     try {
-        
-        const userId = req.params.id;
-        const allProjects = await projectModel.find({ user: userId });
-        if (allProjects.length === 0) {
-            return res.status(404).json({ message: "No projects added" });
-        }
-        
-        res.status(200).json({ project: allProjects});
+        const {
+            filter = "{}",
+            sort = "{}" } = req.query
 
+        // get all projects from the database
+        const allProjects = await projectModel
+            .find(JSON.parse(filter))
+            .sort(JSON.parse(sort))
+            .select(JSON.parse(select));
 
+        res.status(200).json(allProjects);
     } catch (error) {
         return res.status(400).send(error);
     }
-}
+};
 
 
 // Endpoint to get an event with a unique id
