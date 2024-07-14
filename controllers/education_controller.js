@@ -1,50 +1,84 @@
+<<<<<<< HEAD
 import { educationModel } from "../models/education_model.js";
 import { educationSchema } from "../schema/education_schema.js";
 
 
+=======
+import { educationModel } from "./educationModel.js";
+import { educcationSchema } from "./educationSchema.js";
+>>>>>>> origin/create-project-controller-and-route
 
 
 // Endpoints to post education
-export const postEducation = async (req, res, next) => {
+export const postEducation = async (req, res) => {
     try {
 
-        const { error, value } = educationSchema.validate(req.body);
+        const { error, value } = educcationSchema.validate(req.body);
         if (error) {
+
             return res.status(400).send(error.details[0].message);
         }
-        console.log('value', value)
 
+<<<<<<< HEAD
         const newEducation = await educationModel.create(value);
         res.status(201).json({ education: newEducation });
+=======
+        console.log('userId', req.session.user.id);
+        // Log the user ID from the session
+
+        const userSessionId = req.session.user.id;
+
+
+
+
+        const user = await User.findById(userSessionId);
+        // Find the user in the database using the user ID from the session
+        if (!user) {
+            return res.status(404).send('User not found');
+        }
+
+        const education = await educationModel.create({ ...value, user: userSessionId });
+        
+        user.education.push(education._id);
+
+        // Add the ID of the newly created education document to the user's education array
+        await user.save();
+        
+
+        res.status(201).json({ education });
+        
+>>>>>>> origin/create-project-controller-and-route
 
     } catch (error) {
-        next(error);
+        return res.status(500).send(error);
     }
+
 }
 
 // Endpoint to get all education
-export const getEducation = async (req, res, next) => {
+export const getEducation = async (req, res) => {
     try {
 
-        const alleducation = await educationModel.find()
+        const userSessionId = req.session.user.id;
+        const alleducation = await educationModel.find({ user: userSessionId });
+
         if (alleducation.length === 0) {
-            return res.status(404).send('Education not found');
+            return res.status(404).send('No education added');
         }
-        res.status(200).json({education: alleducation});
+        res.status(200).json({ education: alleducation })
 
     } catch (error) {
-        next(error);
+        return res.status(500).send(error);
     }
 };
 
 // Endpoint to get a single education
-export const getSingleEducation = async (req, res, next) => {
+export const getSingleEducation = async (req, res) => {
     try {
-        const getSingleEducation = await educationModel.findById(req.params.id);
-        if (!getSingleEducation) {
-            return res.status(404).send('Education not found');
-        }
-        res.status(200).json('Education retrieved successfully');
+        const getSingleEducation = await educationModel.findById(req.params.id, req.body, { new: true });
+        
+        res.status(200).json(getSingleEducation);
+
     } catch (error) {
         next(error);
     }
@@ -61,7 +95,7 @@ export const updateEducation = async (req, res, next) => {
         }
 
         const updateEducation = await educationModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.status(200).json('Education updated successfully');
+        res.status(200).json(updateEducation);
 
 
     } catch (error) {

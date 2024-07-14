@@ -1,6 +1,8 @@
-import { expereinceModel } from "./expereinceModel.js"
-import { userModel } from "./userModel.js"
-import { expereinceSchema } from "./expereinceSchema.js"
+import { expereinceModel} from "../models/experience_model.js"
+import { userModel } from "../models/user_model.js";
+import { expereinceSchema } from "../schema/experince_schema.js"
+
+
 
 
 // Endpoints to post experience
@@ -11,44 +13,46 @@ export const addExperience = async (req, res) => {
             return res.status(400).send(error.details[0].message)
         }
 
-        const newExpereince = new expereinceModel(value);
+        console.log('userId', req.session.user.id)
 
-        const User = await userModel.findById(value.user);
-        if (!User) {
+        const userSessionId = req.session.user.id;
+
+        const user = await userModel.findById(userSessionId);
+        if(!user) {
             return res.status(404).send('User not found')
         }
 
-        User.experience.push(newExpereince._id);
-        await newExpereince.save();
+        const experience = await expereinceModel.create({...value, user: userSessionId});
 
-        res.status(201).json({ experience: newExpereince });
+        user.experience.push(experience._id);
+        await user.save();
 
+        res.status(201).json({ experience });
     }
 
     catch (error) {
         return res.status(500).send(error)
     }
-}
+};
 
 // Endpoint to get all experience
 export const getExperience = async (req, res) => {
     try {
 
-        const userId = req.params.id;
-        const allExperience = await expereinceModel.find({ user: userId })
+        const userSessionId = req.session.user.id;
+
+        const allExperience = await expereinceModel.find({ user: userSessionId });
 
         if (allExperience.length == 0) {
-            return res.status(404).send('No experience found')
-        }
+            return res.status(404).send('No experience added');
+}
 
-        res.status(200).json({ experience: allExperience })
-
-
+        res.status(200).json({ experience: allExperience });
 
     } catch (error) {
         return res.status(500).send(error)
     }
-}
+};
 
 
 // Endpoint to get a single experience
@@ -74,8 +78,8 @@ export const updateExperience = async (req, res, next) => {
         }
         console.log('value', value)
 
-        const updateExperience = await expereinceModel.findByIdAndUpdate(req.params.id, value)
-        res.status(200).json({ experience: updateExperience })
+        const updateExperience = await expereinceModel.findByIdAndUpdate(req.params.id, req.body, {new: true});
+        return res.status(200).json(updateExperience)
 
     } catch (error) {
         next(error)
@@ -93,7 +97,7 @@ export const deleteExperience = async (req, res, next) => {
         if (!deleteExperience) {
             return res.status(404).send('Experience not found')
         }
-        res.status(200).json({ experience: deleteExperience })
+        returnres.status(200).json({ experience: deleteExperience })
 
     }
 
