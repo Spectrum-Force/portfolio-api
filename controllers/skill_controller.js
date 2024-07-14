@@ -10,15 +10,21 @@ export const addSkill = async (req, res) => {
             return res.status(400).send(error.details[0].message)
         }
 
-        // Create skill with the value
-        const skill = await skillModel.create(value)
-        // after, find the user with the id tht you passed when creating the skills
-        const user = await userModel.findById(value.user);
+        // Find the user with the ID that was passed when the skill was being created
+        console.log('userId', req.session.user.id)
+
+        const userSessionId = req.session.user.id
+
+        const user = await userModel.findById(userSessionId);
         if(!user) {
             return res.status(404).send('User not found');
         }
 
-        // if you find the user, push the education id you just created inside
+        // Create skill with the value
+        const skill = await skillModel.create({...value, user: userSessionId});
+        
+
+        // if you find the user, push the skill id you just created inside
         user.skill.push(skill._id);
 
         // and save the user now with skillId
@@ -51,8 +57,8 @@ export const patchSkill = async (req, res, next) => {
 export const getSkills = async (req, res) => {
     try {
         // we are fetching skills that belong to a particular user
-        const userId = req.params.id
-        const allSkills = await skillModel.find({user: userId})
+        const userSessionId = req.session.user.id
+        const allSkills = await skillModel.find({user: userSessionId});
         if(allSkills.length == 0) {
             return res.status(404).send('No skills added')
         }

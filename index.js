@@ -7,6 +7,7 @@ import achievementRouter from "./routers/achievement_route.js";
 import skillRouter from "./routers/skills_routes.js";
 import educationRouter from "./routers/education_route.js";
 import projectRouter from "./routers/project_route.js";
+import experienceRouter from "./routers/experience_router.js";
 
 // Create the express app
 const userApp = express();
@@ -23,18 +24,23 @@ userApp.use(session({
     saveUninitialized: true,
     // cookie: {secure: true}
     store: MongoStore.create({
-        mongoUrl: process.env.mongo_url
+        mongoUrl: process.env.MONGO_URL
     })
 }));
 
 // Use routes
 userApp.use('/api/v1', userRouter)
 userApp.use('/api/v1', educationRouter)
-userApp.use('/user/achievements', achievementRouter)
-userApp.use('/user/skills', skillRouter)
-userApp.use('/user/projects', projectRouter)
+userApp.use('/api/v1', achievementRouter)
+userApp.use('/api/v1', skillRouter)
+userApp.use('/api/v1', projectRouter)
+userApp.use('/api/v1', experienceRouter)
+userApp.use('//api/v1', volunteeringRouter)
+
+
+const port = process.env.PORT || 5050
 
 // Listen for incoming requests
-userApp.listen(5050, () => {
-    console.log('The app is listening on port 5050.')
+userApp.listen(PORT, () => {
+    console.log(`The app is listening on port ${port}`)
 })

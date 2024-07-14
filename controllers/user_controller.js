@@ -13,7 +13,7 @@ export const signup = async (req, res) => {
     // Check if the user exists in the database using their email
     // Get the user email from the value. NB: The req.body is in the value
     const email = value.email
-    console.log('email', email)
+    // console.log('email', email)
 
     const findIfUserExist = await userModel.findOne({email})
     if(findIfUserExist){
@@ -30,13 +30,14 @@ export const signup = async (req, res) => {
        
         // Create the new user
         const addUser = await userModel.create(value)
+        req.session.user = {id: addUser.id}
         return res.status(201).send(addUser)
     }
 }
 
 export const login = async (req, res, next) => {
     try {
-        const {email, userName} = req.body
+        const {email, userName, password} = req.body
         // Find a user using their unique identifier
         const user = await userModel.findOne({
             $or: [
@@ -48,14 +49,16 @@ export const login = async (req, res, next) => {
             return res.status(401).json('No user found')
         } else {
             // Verify their password
-            const correctPassword = bcrypt.compareSync(req.body.password, user.password);
+            const correctPassword = bcrypt.compareSync(password, user.password);
             if(!correctPassword) {
                 res.status(401).json('Invalid credentials')
             } else {
                 // Generate a session for them
                 req.session.user = {id: user.id}
+
+                console.log('user', req.session.user)
                 // Return response
-                res.status(200).json('Login successful')
+                res.status(201).json('Login successful')
             }
         }
     } catch (error) {
@@ -67,14 +70,19 @@ export const login = async (req, res, next) => {
 export const getUser = async (req, res, next) => {
     // we are fetching all users
     try {
-        const userId = req.params.id
+        const userId = req.params.userId
 
         //get user based on the user id
         //use the select to exclude the password
         //use populate to populate the education
-        const userDetails = await userModel.findById(userId)
+        const userDetails = await userModel.find({userId})
         .select('-password')
         .populate('education')
+        .populate('skills')
+        .populate('achievements')
+        .populate('projects')
+        .populate('userProfile')
+        .populate('experiences')
         
         return res.status(201).json({user: userDetails})
     } catch (error) {

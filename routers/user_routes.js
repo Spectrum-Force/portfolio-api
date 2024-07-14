@@ -1,4 +1,4 @@
-import { login, logout, profile, signup } from "../controllers/user_controller.js";
+import { getUser, login, logout, profile, signup } from "../controllers/user_controller.js";
 import { Router } from "express";
 import { checkUserSession } from "../middlewares/auth.js";
 
@@ -8,4 +8,5 @@ userRouter.post('/users/signup', signup);
 userRouter.post('users/login', login);
 userRouter.post('/users/logout', checkUserSession, logout);
 userRouter.get('/users/profile', checkUserSession, profile);
+userRouter.get('/users/:userName', getUser);
 
