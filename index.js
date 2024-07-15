@@ -35,12 +35,13 @@ userApp.use('/api/v1', achievementRouter)
 userApp.use('/api/v1', skillRouter)
 userApp.use('/api/v1', projectRouter)
 userApp.use('/api/v1', experienceRouter)
-userApp.use('//api/v1', volunteeringRouter)
+// userApp.use('//api/v1', volunteeringRouter)
+
 
 
 const port = process.env.PORT || 5050
 
 // Listen for incoming requests
-userApp.listen(PORT, () => {
+userApp.listen(port, () => {
     console.log(`The app is listening on port ${port}`)
 })

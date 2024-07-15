@@ -1,17 +1,18 @@
-import { expereinceModel } from "./expereinceModel.js"
-import { userModel } from "./userModel.js"
-import { expereinceSchema } from "./expereinceSchema.js"
+import { experienceModel } from "../models/experience_model.js"
+import { userModel } from "../models/user_model.js"
+import { experinceSchema } from "../schema/experince_schema.js"
+// import { expereinceSchema } from "../schema/experince_schema.js"
 
 
 // Endpoints to post experience
 export const addExperience = async (req, res) => {
     try {
-        const { error, value } = expereinceSchema.validate(req.body)
+        const { error, value } = experinceSchema.validate(req.body)
         if (error) {
             return res.status(400).send(error.details[0].message)
         }
 
-        const newExpereince = new expereinceModel(value);
+        const newExpereince = new experienceModel(value);
 
         const User = await userModel.findById(value.user);
         if (!User) {
