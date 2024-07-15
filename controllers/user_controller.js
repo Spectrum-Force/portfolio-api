@@ -50,13 +50,13 @@ export const login = async (req, res, next) => {
         // Verify their password
         const correctPassword = bcrypt.compareSync(password, user.password);
         if (!correctPassword) {
-            res.status(401).json('Invalid credentials')
+            return res.status(401).json('Invalid credentials')
         }
         // Generate a session for them
         req.session.user = { id: user.id }
 
         // Return response
-        res.status(201).json('Login successful')
+        return res.status(201).json('Login successful')
 
 
     } catch (error) {
@@ -126,7 +126,7 @@ export const logout = async (req, res, next) => {
         // Destroy user session
         await req.session.destroy();
         // Return response
-        res.status(200).json('Logout successful')
+        return res.status(200).json('Logout successful')
     } catch (error) {
         next(error);
     }
@@ -139,7 +139,7 @@ export const profile = async (req, res, next) => {
             .findById(req.session.user.id)
             .select({ password: false });
         // Return response
-        res.status(200).json(user)
+        return res.status(200).json(user)
     } catch (error) {
         next(error);
     }
