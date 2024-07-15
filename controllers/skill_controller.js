@@ -1,6 +1,8 @@
 import { skillModel } from "../models/skills_model.js";
-import { userModel } from "../models/user_model.js";
 import { skillsSchema } from "../schema/skills_schema.js";
+import { userModel } from "../models/user_model.js";
+
+
 
 // Create a function to post a skill
 export const addSkill = async (req, res) => {
@@ -9,6 +11,7 @@ export const addSkill = async (req, res) => {
         if(error) {
             return res.status(400).send(error.details[0].message)
         }
+
 
         // Find the user with the ID that was passed when the skill was being created
         console.log('userId', req.session.user.id)
@@ -39,12 +42,14 @@ export const addSkill = async (req, res) => {
 }
 
 // Function to update a skill
+
 export const patchSkill = async (req, res) => {
     try {
         const {error, value} = skillsSchema.validate(req.body)
         if(error) {
             return res.status(400).json(error.details[0].message)
         }
+
 
         const userSessionId = req.sesion.user.id;
         const user = await userModel.findById(userSessionId);
@@ -65,6 +70,7 @@ export const patchSkill = async (req, res) => {
 // Create a function to get all skills
 export const getSkills = async (req, res) => {
     try {
+
         // we are fetching skills that belong to a particular user
         const userSessionId = req.session.user.id
         const allSkills = await skillModel.find({user: userSessionId});
@@ -79,6 +85,7 @@ export const getSkills = async (req, res) => {
 }
 
 // Get a skill by a unique id
+
 export const getOneSkill = async (req, res, next) => {
     try {
         const oneSkill = await skillModel.findById(req,params.id)
@@ -91,7 +98,7 @@ export const getOneSkill = async (req, res, next) => {
 // Function to delete a skill with a unique ID
 export const deleteSkill = async (req, res, next) => {
     try {
-
+  
         const userSessionId = req.session.user.id;
         const user = await userModel.findById(userSessionId);
 

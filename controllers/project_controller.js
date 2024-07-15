@@ -1,5 +1,5 @@
 import { projectModel } from "../models/project_model.js";
-
+import { User } from "../models/user_model.js";
 import { projectSchema } from "../schema/projects_schema.js";
 
 // Endpoints to post projects
@@ -10,49 +10,67 @@ export const postProject = async (req, res) => {
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
-        console.log('value', value);
 
-        const newProject = await projectModel(value);
-        res.status(201).json({project: newProject});
+        console.log('userId', req.session.user.id);
+
+        const userSessionId = req.session.user.id;
+
+        const user = await User.findById(userSessionId);
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const project = await projectModel.create({
+            ...value,
+            user: userSessionId
+        });
+
+        user.education.push(project._id);
+        await user.save();
+
+        res.status(201).json({ project });
 
 
     } catch (error) {
-        next(error);
+        return res.status(400).send(error);
     }
 };
 
 // Endpoint to get all projects
-export const getProjects = async (req, res, next) => {
+export const getProjects = async (req, res) => {
     try {
-                // get all projects from the database
-        const allProjects = await projectModel.find()
-            if (allProjects.length === 0) {
-                return res.status(404).send('No projects found')
-            }
 
-        res.status(200).json({ projects: allProjects });
+        const userSessionId = req.session.user.id
+        const allProjects = await projectModel.find({ user: userSessionId });
+
+        if (allProjects.length == 0) {
+            return res.status(404).json({ message: "No projects found" });
+        }
+        res.staus(200).json({project: allProjects});
+
     } catch (error) {
-        next(error)
+        return res.status(400).send(error);
     }
 };
 
 
 // Endpoint to get an event with a unique id
 
-export const getOneProject = async (req, res, next) => {
+export const getOneProject = async (req, res) => {
     try {
         const getSingleProject = await projectModel.findById(req.params.id)
         console.log(`Project with ID ${req.params.id} has been retrieved`)
         res.status(200).json(getSingleProject);
 
     } catch (error) {
-        next(error)
+        return res.status(400).send(error);
     }
 }
 
 // Endpoint to update the details of a project
 
-export const updateProject = async (req, res, next) => {
+export const updateProject = async (req, res) => {
     try {
         const { error } = projectSchema.validate(req.body);
         if (error) {
@@ -63,7 +81,7 @@ export const updateProject = async (req, res, next) => {
         res.json(updateProject);
 
     } catch (error) {
-        next(error)
+        return res.status(400).send(error);
     }
 }
 

@@ -6,6 +6,7 @@ import { checkUserSession } from "../middlewares/auth.js";
 const skillRouter = Router();
 
 // Define routes
+
 skillRouter.get('/users/skills', checkUserSession, getSkills);
 skillRouter.get('/users/skills/:id', checkUserSession, getOneSkill);
 skillRouter.post('/users/skills', checkUserSession, addSkill);
