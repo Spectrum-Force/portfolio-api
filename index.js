@@ -1,4 +1,5 @@
 import express from "express";
+import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
