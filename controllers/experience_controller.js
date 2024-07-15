@@ -1,21 +1,18 @@
+
 import { expereinceModel} from "../models/experience_model.js"
 import { userModel } from "../models/user_model.js";
 import { expereinceSchema } from "../schema/experince_schema.js"
 
 
 
-
 // Endpoints to post experience
 export const addExperience = async (req, res) => {
     try {
-        const { error, value } = expereinceSchema.validate(req.body)
+        const { error, value } = experinceSchema.validate(req.body)
         if (error) {
             return res.status(400).send(error.details[0].message)
         }
 
-        console.log('userId', req.session.user.id)
-
-        const userSessionId = req.session.user.id;
 
         const user = await userModel.findById(userSessionId);
         if(!user) {
@@ -40,6 +37,12 @@ export const getExperience = async (req, res) => {
     try {
 
         const userSessionId = req.session.user.id;
+        const userId = req.params.id;
+        const allExperience = await expereinceModel.find({ user: userId })
+
+        if (allExperience.length == 0) {
+            return res.status(404).send('No experience found')
+        }
 
         const allExperience = await expereinceModel.find({ user: userSessionId });
 

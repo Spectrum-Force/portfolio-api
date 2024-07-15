@@ -1,28 +1,19 @@
-<<<<<<< HEAD
 import { educationModel } from "../models/education_model.js";
 import { educationSchema } from "../schema/education_schema.js";
-
-
-=======
-import { educationModel } from "./educationModel.js";
-import { educcationSchema } from "./educationSchema.js";
->>>>>>> origin/create-project-controller-and-route
-
 
 // Endpoints to post education
 export const postEducation = async (req, res) => {
     try {
 
-        const { error, value } = educcationSchema.validate(req.body);
+        const { error, value } = educationSchema.validate(req.body);
         if (error) {
 
             return res.status(400).send(error.details[0].message);
         }
 
-<<<<<<< HEAD
         const newEducation = await educationModel.create(value);
         res.status(201).json({ education: newEducation });
-=======
+
         console.log('userId', req.session.user.id);
         // Log the user ID from the session
 
@@ -47,7 +38,7 @@ export const postEducation = async (req, res) => {
 
         res.status(201).json({ education });
         
->>>>>>> origin/create-project-controller-and-route
+
 
     } catch (error) {
         return res.status(500).send(error);
@@ -59,8 +50,14 @@ export const postEducation = async (req, res) => {
 export const getEducation = async (req, res) => {
     try {
 
+
         const userSessionId = req.session.user.id;
         const alleducation = await educationModel.find({ user: userSessionId });
+
+
+        const userId =  req.params.id;
+        const alleducation = await educationModel.find({user: userId});
+        
 
         if (alleducation.length === 0) {
             return res.status(404).send('No education added');
