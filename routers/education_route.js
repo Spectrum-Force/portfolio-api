@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { postEducation, getEducation, deleteEducation, updateEducation, getSingleEducation } from "../controllers/education_controller.js";
-import { checkUserSession } from "../middleware/auth.js";
+import { checkUserSession } from "../middlewares/auth.js";
 
 
 

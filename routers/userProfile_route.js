@@ -2,7 +2,7 @@ import { Router } from "express";
 
 import { addUserProfile, getUserProfile, updateUserProfile, deleteUserProfile } from "../controllers/userProfile_controller.js";
 
-import { checkUserSession } from "../middleware/auth.js";
+import { checkUserSession } from "../middlewares/auth.js";
 
 
 const userProfileRouter = Router();

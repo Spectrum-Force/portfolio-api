@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { postProject, getProjects, getOneProject, deleteProject, updateProject } from "../controllers/project_controller.js";
-import { checkUserSession } from "../middleware/auth.js";
+import { checkUserSession } from "../middlewares/auth.js";
 
 const projectRouter = Router();
 

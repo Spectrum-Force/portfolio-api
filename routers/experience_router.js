@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { addExperience, getExperience, getSingleExperience,updateExperience, deleteExperience } from "../controllers/experience_controller.js";
-import { checkUserSession } from "../middleware/auth.js";
+import { checkUserSession } from "../middlewares/auth.js";
 
 
 const experienceRouter = Router();
