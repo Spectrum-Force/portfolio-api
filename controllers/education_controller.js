@@ -1,42 +1,46 @@
-import { educationModel } from "./educationModel.js";
-import { educcationSchema } from "./educationSchema.js";
+import { educationModel } from "../models/education_model.js";
+import { educationSchema } from "../schema/education_schema.js";
+
+
 
 
 // Endpoints to post education
-export const postEducation = async (req, res, next) => {
+export const postEducation = async (req, res) => {
     try {
 
-        const { error, value } = educcationSchema.validate(req.body);
+        const { error, value } = educationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
-        console.log('value', value)
 
-        const newEducation = await educationModel(value);
+
+        const newEducation = await educationModel.create(value);
         res.status(201).json({ education: newEducation });
 
     } catch (error) {
-        next(error);
+        return res.status(500).send(error);
     }
 }
 
 // Endpoint to get all education
-export const getEducation = async (req, res, next) => {
+export const getEducation = async (req, res) => {
     try {
 
-        const alleducation = await educationModel.find()
+        const userId =  req.params.id;
+        const alleducation = await educationModel.find({user: userId});
+        
         if (alleducation.length === 0) {
-            return res.status(404).send('Education not found');
+            return res.status(404).send('No education added');
         }
-        res.status(200).json({education: alleducation});
+        res.status(200).json({ education: alleducation })
 
     } catch (error) {
-        next(error);
+        return res.status(500).send(error);
     }
 };
 
 // Endpoint to get a single education
-export const getSingleEducation = async (req, res, next) => {
+export const getSingleEducation = async (req, res) => {
     try {
         const getSingleEducation = await educationModel.findById(req.params.id);
         if (!getSingleEducation) {
@@ -53,7 +57,7 @@ export const getSingleEducation = async (req, res, next) => {
 export const updateEducation = async (req, res, next) => {
     try {
 
-        const { error } = educcationSchema.validate(req.body);
+        const { error } = educationSchema.validate(req.body);
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
