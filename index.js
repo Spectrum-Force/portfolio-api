@@ -11,6 +11,7 @@ import educationRouter from "./routers/education_route.js";
 import projectRouter from "./routers/project_route.js";
 import experienceRouter from "./routers/experience_router.js";
 import expressOasGenerator from 'express-oas-generator';
+import userProfileRouter from "./routers/userProfile_route.js";
 
 // Create the express app
 const app = express();
@@ -27,7 +28,7 @@ dbConnection();
 
 // Apply middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({credentials: true, origin: '*'}));
 
 app.use(session({
     secret: process.env.SESSION_SECRET, //encrypts the file
@@ -46,9 +47,11 @@ app.use('/api/v1', achievementRouter)
 app.use('/api/v1', skillRouter)
 app.use('/api/v1', projectRouter)
 app.use('/api/v1', experienceRouter)
+app.use('/api/v1', userProfileRouter)
 // userApp.use('//api/v1', volunteeringRouter)
 
-
+expressOasGenerator.handleRequests();
+app.use((req, res) => res.redirect('/api-docs/'));
 
 const port = process.env.PORT || 5050
 

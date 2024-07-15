@@ -90,18 +90,18 @@ export const updateUserProfile = async (req, res) => {
 };
 
 // Delete a user profile by ID
-export const deleteUserProfile = async (req, res) => {
-    try {
+// export const deleteUserProfile = async (req, res) => {
+//     try {
 
-        const deletedUserProfile = await userProfileModel.findByIdAndDelete(req.params.id);
+//         const deletedUserProfile = await userProfileModel.findByIdAndDelete(req.params.id);
 
-        if (!deletedUserProfile) {
-            return res.status(404).send('UserProfile not found');
-        }
+//         if (!deletedUserProfile) {
+//             return res.status(404).send('UserProfile not found');
+//         }
 
-        return res.status(200).json({ userProfile: deletedUserProfile });
+//         return res.status(200).json({ userProfile: deletedUserProfile });
 
-    } catch (error) {
-        return res.status(500).send(error);
-    }
-};
+//     } catch (error) {
+//         return res.status(500).send(error);
+//     }
+// };
