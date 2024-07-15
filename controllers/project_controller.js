@@ -1,5 +1,5 @@
 import { projectModel } from "../models/project_model.js";
-import { User } from "../models/user_model.js";
+import { userModel } from "../models/user_model.js";
 import { projectSchema } from "../schema/projects_schema.js";
 
 // Endpoints to post projects
@@ -15,7 +15,7 @@ export const postProject = async (req, res) => {
 
         const userSessionId = req.session.user.id;
 
-        const user = await User.findById(userSessionId);
+        const user = await userModel.findById(userSessionId);
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });

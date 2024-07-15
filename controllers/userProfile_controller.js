@@ -1,7 +1,7 @@
 // Import necessary modules
 import { userProfileModel } from '../models/userProfile_model.js';
 import { userProfileSchema } from '../schema/userProfile_schema.js';
-import { User } from '../models/user_model.js';
+import { userModel } from '../models/user_model.js';
 
 // Create a new user profile
 export const addUserProfile = async (req, res) => {
@@ -20,14 +20,14 @@ export const addUserProfile = async (req, res) => {
 
         const userSessionId = req.session.user.id;
 
-        const user = await User.findById(userSessionId);
+        const user = await userModel.findById(userSessionId);
         if (!user) {
             return res.status(404).send('User not found');
         }
 
         const profile = await userProfileModel.create({ ...value, user: userSessionId });
 
-        user.userProfileModel = profile._id;
+        user.userProfile = profile._id;
         await user.save();
         res.status(201).json({ profile })
 
@@ -69,7 +69,7 @@ export const updateUserProfile = async (req, res) => {
 
         const userSessionId = req.session.user.id;
 
-        const user = await User.findById(userSessionId);
+        const user = await userModel.findById(userSessionId);
       if (!user) {
         return res.status(404).send("User not found");
       }
