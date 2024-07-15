@@ -55,10 +55,6 @@ export const getEducation = async (req, res) => {
 
         const userSessionId = req.session.user.id;
         const alleducation = await educationModel.find({ user: userSessionId });
-
-
-        const userId =  req.params.id;
-        const alleducation = await educationModel.find({user: userId});
         
 
         if (alleducation.length === 0) {
