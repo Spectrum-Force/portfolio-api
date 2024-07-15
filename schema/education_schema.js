@@ -6,9 +6,10 @@ export const educationSchema = joi.object(
         location: joi.string(),
         program: joi.string().required(),
         qualification: joi.string().required(),
-        grade: joi.string,
+        grade: joi.string(),
         startDate: joi.string(),
         endDate: joi.string(),
+        user: joi.string()
     }
 );
 

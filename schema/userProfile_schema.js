@@ -14,7 +14,8 @@ export const userProfileSchema = joi.object(
     resume: joi.string(),    
     github: joi.string().uri(),
     linkedin: joi.string().uri(),
-    twitter: joi.string().uri()
+    twitter: joi.string().uri(),
+    user: joi.string()
 
 });
 

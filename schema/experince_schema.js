@@ -6,6 +6,7 @@ export const experinceSchema = joi.object({
     responsibility: joi.string(),
     location: joi.string(),
     startDate: joi.date(),
-    endDate: joi.date()
+    endDate: joi.date(),
+    user: joi.string()
 
 });

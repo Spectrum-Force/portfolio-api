@@ -11,6 +11,7 @@ export const projectSchema = joi.object({
     nameOfInstitution: joi.string(),
     startDate: joi.string(),
     endDate: joi.string(),
+    user: joi.string()
 
 })
 

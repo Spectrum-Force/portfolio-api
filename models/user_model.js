@@ -6,7 +6,7 @@ const userSchema = new Schema({
         lastName: { type: String },
         otherNames: { type: String },
         email: { type: String, lowercase: true, unique: true },
-        password: { type: String, select: false },
+        password: { type: String },
         // confirmedPassword: {type: String},
         userName: { type: String, lowercase: true, unique: true },
         termsAndConditions: { type: Boolean },

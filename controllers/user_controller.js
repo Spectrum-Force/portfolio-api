@@ -1,4 +1,4 @@
-import * as bcrypt from "bcrypt";
+import bcrypt from "bcrypt";
 import { userModel } from "../models/user_model.js";
 import { userSchema } from "../schema/user_schema.js";
 
@@ -55,12 +55,12 @@ export const login = async (req, res, next) => {
         // Generate a session for them
         req.session.user = { id: user.id }
 
-        console.log('user', req.session.user)
         // Return response
         res.status(201).json('Login successful')
 
 
     } catch (error) {
+        console.log(error)
         next(error);
     }
 }

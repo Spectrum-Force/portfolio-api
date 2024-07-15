@@ -22,15 +22,14 @@ expressOasGenerator.handleResponses(app, {
     mongooseModels: mongoose.modelNames(), 
 })
 
-
-// Connect to the database
-dbConnection();
+const PORT = process.env.PORT || 5050
 
 // Apply middlewares
 app.use(express.json());
-app.use(cors({credentials: true, origin: '*'}));
+app.use(cors({credentials: true, origin: 'http://localhost:5050'}));
 
-app.use(session({
+app.use(
+    session({
     secret: process.env.SESSION_SECRET, //encrypts the file
     resave: false,
     saveUninitialized: true,
@@ -39,6 +38,10 @@ app.use(session({
         mongoUrl: process.env.MONGO_URL
     })
 }));
+
+app.get("/api/v1/health", (req, res) => {
+    res.json({ status: "UP" });
+  });
 
 // Use routes
 app.use('/api/v1', userRouter)
@@ -53,9 +56,11 @@ app.use('/api/v1', userProfileRouter)
 expressOasGenerator.handleRequests();
 app.use((req, res) => res.redirect('/api-docs/'));
 
-const port = process.env.PORT || 5050
+// Connect to the database
+dbConnection();
+
 
 // Listen for incoming requests
-app.listen(port, () => {
-    console.log(`The app is listening on port ${port}`)
+app.listen(PORT, () => {
+    console.log(`The app is listening on port ${PORT}`)
 })
