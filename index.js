@@ -53,6 +53,6 @@ app.use('/api/v1', experienceRouter)
 const port = process.env.PORT || 5050
 
 // Listen for incoming requests
-userApp.listen(port, () => {
+app.listen(port, () => {
     console.log(`The app is listening on port ${port}`)
 })
