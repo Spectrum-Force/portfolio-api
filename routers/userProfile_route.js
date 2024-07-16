@@ -6,7 +6,7 @@ import { remoteUpload } from "../middlewares/upload.js";
 
 const userProfileRouter = Router();
 
-userProfileRouter.get( "/users/userProfile", getUserProfile);
+userProfileRouter.get( "/users/userProfile", checkUserSession, getUserProfile);
 
 userProfileRouter.post(
   "/users/userProfile",

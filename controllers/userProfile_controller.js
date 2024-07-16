@@ -47,6 +47,7 @@ export const getUserProfile = async (req, res) => {
         if (!userProfile) {
             return res.status(404).send('User Profile not found');
         }
+        res.status(200).json({profile: userProfile})
        
 
     } catch (error) {
@@ -80,10 +81,10 @@ export const updateUserProfile = async (req, res) => {
             return res.status(404).send('Profile not found');
         }
 
-        return res.status(200).json({ userProfile: updatedUserProfile });
+        return res.status(200).json({ profile: updatedUserProfile });
 
     } catch (error) {
-        returnres.status(500).send(error);
+        return res.status(500).send(error);
     }
 
 
