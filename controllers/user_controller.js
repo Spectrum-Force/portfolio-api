@@ -75,7 +75,7 @@ export const getUser = async (req, res, next) => {
         //use the select to exclude the password
         //use populate to populate the education
         const options = {sort: {startDate: -1}}
-        const userDetails = await userModel.find({ userName })
+        const userDetails = await userModel.findOne({ userName }).select("-password")
             .populate({
                 path: "education",
                 options,
@@ -89,10 +89,6 @@ export const getUser = async (req, res, next) => {
             })
             .populate({
                 path: "experiences",
-                options,
-            })
-            .populate({
-                path: "volunteering",
                 options,
             });
 

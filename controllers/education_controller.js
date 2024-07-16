@@ -9,38 +9,27 @@ export const postEducation = async (req, res) => {
 
         const { error, value } = educationSchema.validate(req.body);
         if (error) {
-
             return res.status(400).send(error.details[0].message);
         }
 
-        const newEducation = await educationModel.create(value);
-        res.status(201).json({ education: newEducation });
-
-        console.log('userId', req.session.user.id);
-        // Log the user ID from the session
+        //after, find the user with the id that you passed when creating the education
+        console.log('userId',req.session.user.id)
 
         const userSessionId = req.session.user.id;
 
-
-
-
-        const user = await user.findById(userSessionId);
+        const user = await userModel.findById(userSessionId);
         // Find the user in the database using the user ID from the session
         if (!user) {
             return res.status(404).send('User not found');
         }
 
         const education = await educationModel.create({ ...value, user: userSessionId });
-
         user.education.push(education._id);
 
         // Add the ID of the newly created education document to the user's education array
         await user.save();
 
-
         res.status(201).json({ education });
-
-
 
     } catch (error) {
         return res.status(500).send(error);

@@ -15,8 +15,8 @@ const userSchema = new Schema({
         achievements: [{type: Types.ObjectId, ref: 'Achievement'}],
         projects: [{type: Types.ObjectId, ref: 'Project'}],
         userProfile: [{type: Types.ObjectId, ref: 'UserProfile'}],
-        volunteering: [{type: Types.ObjectId, ref: 'Volunteering'}],
-        experiences: [{type: Types.ObjectId, ref: 'Experiences'}]
+        // volunteering: [{type: Types.ObjectId, ref: 'Volunteering'}],
+        experiences: [{type: Types.ObjectId, ref: 'Experience'}]
 }, {
         timestamps: true
 });

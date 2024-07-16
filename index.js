@@ -5,6 +5,7 @@ import MongoStore from "connect-mongo";
 import cors from "cors";
 import { dbConnection } from "./config/db.js";
 import { userRouter } from "./routers/user_routes.js";
+import { restartServer } from "./restart_server.js";
 import achievementRouter from "./routers/achievement_route.js";
 import skillRouter from "./routers/skills_routes.js";
 import educationRouter from "./routers/education_route.js";
@@ -56,11 +57,22 @@ app.use('/api/v1', userProfileRouter)
 expressOasGenerator.handleRequests();
 app.use((req, res) => res.redirect('/api-docs/'));
 
+const reboot = async () => {
+    setInterval(restartServer, process.env.INTERVAL)
+    }
+
 // Connect to the database
-dbConnection();
+dbConnection()
+.then(() => {
+    app.listen(PORT, () => {
+        reboot().then(() => {
+        console.log(`Server Restarted`);
+      });
+      console.log(`Server is connected to Port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.log(err);
+    process.exit(-1);
+  });
 
-
-// Listen for incoming requests
-app.listen(PORT, () => {
-    console.log(`The app is listening on port ${PORT}`)
-})
