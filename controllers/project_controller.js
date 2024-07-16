@@ -1,4 +1,5 @@
 import { projectModel } from "../models/project_model.js";
+import { userProfileModel } from "../models/userProfile_model.js";
 import { userModel } from "../models/user_model.js";
 import { projectSchema } from "../schema/projects_schema.js";
 
@@ -6,12 +7,13 @@ import { projectSchema } from "../schema/projects_schema.js";
 export const postProject = async (req, res) => {
     try {
 
-        const { error, value } = projectSchema.validate(req.body);
+        const { error, value } = projectSchema.validate({
+            ...req.body,
+            // image: req.file.filename
+        });
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
-
-        console.log('userId', req.session.user.id);
 
         const userSessionId = req.session.user.id;
 
@@ -26,10 +28,11 @@ export const postProject = async (req, res) => {
             user: userSessionId
         });
 
-        user.education.push(project._id);
+        user.projects.push(project._id);
         await user.save();
 
         res.status(201).json({ project });
+        console.log(project)
 
 
     } catch (error) {
@@ -47,10 +50,10 @@ export const getProjects = async (req, res) => {
         if (allProjects.length == 0) {
             return res.status(404).json({ message: "No projects found" });
         }
-        res.staus(200).json({project: allProjects});
+        res.status(200).json({Projects: allProjects});
 
     } catch (error) {
-        return res.status(400).send(error);
+        return res.status(400).send(error.message);
     }
 };
 
@@ -72,13 +75,27 @@ export const getOneProject = async (req, res) => {
 
 export const updateProject = async (req, res) => {
     try {
-        const { error } = projectSchema.validate(req.body);
+        const { error, value } = projectSchema.validate({
+            ...req.body,
+            image: req.file.filename
+        });
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
 
-        const updateProject = await projectModel.findByIdAndUpdate(req.params.id, req.body, { new: true });
-        res.json(updateProject);
+        const userSessionId = req.session.user.id;
+        const user = await userModel.findById(userSessionId);
+
+        if (!user) {
+            return res.status(404).send("User not found")
+        }
+
+        const updateProject = await projectModel.findByIdAndUpdate(req.params.id, value, { new: true });
+        if (!updateProject) {
+            return res.status(404).send("Project not found");
+        }
+
+        res.json({project: updateProject});
 
     } catch (error) {
         return res.status(400).send(error);
@@ -87,13 +104,24 @@ export const updateProject = async (req, res) => {
 
 
 // Endpoint to delete an event with a unique id
-export const deleteProject = async (req, res, next) => {
+export const deleteProject = async (req, res) => {
     try {
+
+        const userSessionId = req.session.user.id;
+        const user = await userModel.findById(userSessionId);
+        if (!user) {
+            return res.status(404).send("User not found");
+        }
+
         const deleteProject = await projectModel.findByIdAndDelete(req.params.id);
         if (!deleteProject) {
-            return res.status(404).json({ message: "Project not found" });
+            return res.status(404).json("Project not found");
         }
-        res.status(200).json({ message: "Project deleted successfully" });
+
+        user.projects.pull(req.params.id);
+        await user.save();
+        
+        res.status(200).json("Project deleted successfully" );
 
     } catch (error) {
         next(error)
