@@ -4,7 +4,7 @@ import { Router } from "express";
 
 export const userRouter = Router();
 
-userRouter.get('/users', getUsers);
+userRouter.get('/users/auth', getUsers);
 userRouter.post('/users/auth/signup', signup);
 userRouter.post('/users/auth/login', login);
 userRouter.post('/users/auth/token', token);
