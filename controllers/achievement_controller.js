@@ -5,8 +5,13 @@ import { userModel } from "../models/user_model.js";
 // Create a function to post an achievement
 export const addAchievement = async (req, res) => {
     try {
-        const { error, value } = achievementSchema.validate(req.body)
-        if (error) {
+
+        const {error, value} = achievementSchema.validate({
+            ...req.body,
+            image: req.files.image[0].filename,
+        });
+        if(error){
+
             return res.status(400).send(error.details[0].message)
         }
 
@@ -19,7 +24,12 @@ export const addAchievement = async (req, res) => {
         }
 
         // create achievement with the value
-        const achievement = await achievementModel.create({ ...value, user: userSessionId })
+
+        const achievement = await achievementModel.create({
+            ...value,
+            user: userSessionId
+        });
+
 
         // if you find the user, push the achievement id you just created inside
         user.achievements.push(achievement._id);

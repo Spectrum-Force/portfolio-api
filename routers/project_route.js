@@ -4,14 +4,14 @@ import { checkUserSession } from "../middlewares/auth.js";
 
 const projectRouter = Router();
 
-projectRouter.post("/user/projects", checkUserSession, postProject);
+projectRouter.post("/users/projects", checkUserSession, postProject);
 
-projectRouter.get("/user/projects", checkUserSession, getProjects);
+projectRouter.get("/users/projects", checkUserSession, getProjects);
 
-projectRouter.get("/user/projects/:id", getOneProject);
+projectRouter.get("/users/projects/:id", getOneProject);
 
-projectRouter.delete("/user/projects/:id", deleteProject);
+projectRouter.delete("/users/projects/:id", deleteProject);
 
-projectRouter.patch("/user/projects/:id", checkUserSession, updateProject);
+projectRouter.patch("/users/projects/:id", checkUserSession, updateProject);
 
 export default projectRouter;
