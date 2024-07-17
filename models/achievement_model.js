@@ -6,6 +6,7 @@ const achievementSchema = new Schema({
     description: { type: String },
     date: { type: String },
     nameOfInstitution: { type: String },
+    image: { type: String },
     user: { type: Types.ObjectId, ref: 'User' }
 }, {
     timestamps: true

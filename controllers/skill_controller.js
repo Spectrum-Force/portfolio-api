@@ -51,19 +51,19 @@ export const patchSkill = async (req, res) => {
         }
 
 
-        const userSessionId = req.sesion.user.id;
+        const userSessionId = req.session?.user?.id || req?.user?.id;
         const user = await userModel.findById(userSessionId);
         if(!user) {
             return res.status(404).send("User not found")
         }
         const updatedSkill = await skillModel.findByIdAndUpdate(req.params.id, value, {new: true});
-        if (!skill) {
+        if (!updatedSkill) {
             return res.status(404).send('Skill not found');
         }
         // Return response
         res.status(200).json({Skill: updatedSkill})
     } catch (error) {
-        return res.status(500).json({error})
+        return res.status(500).json(error.message)
     }
 }
 

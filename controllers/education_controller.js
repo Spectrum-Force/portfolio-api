@@ -78,14 +78,14 @@ export const updateEducation = async (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
 
-        const userSessionId = req.session.user.id;
+        const userId = req.session?.user?.id || req?.user.id;
 
-        const user = await userModel.findById(userSessionId);
+        const user = await userModel.findById(userId);
         if (!user) {
             return res.status(404).send("User not found");
         }
 
-        const Education = await Education.findByIdAndUpdate(req.params.id, value, { new: true });
+        const Education = await educationModel.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!Education) {
             return res.status(404).send("Education not found");
         }
@@ -95,7 +95,7 @@ export const updateEducation = async (req, res) => {
 
 
     } catch (error) {
-        return res.status(500).json({ error })
+        return res.status(500).json(error.message)
     }
 }
 

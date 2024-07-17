@@ -9,7 +9,7 @@ export const postProject = async (req, res) => {
 
         const { error, value } = projectSchema.validate({
             ...req.body,
-            // image: req.file.filename
+            image: req.file.filename
         });
         if (error) {
             return res.status(400).send(error.details[0].message);
@@ -83,7 +83,7 @@ export const updateProject = async (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
         const user = await userModel.findById(userSessionId);
 
         if (!user) {
@@ -95,10 +95,10 @@ export const updateProject = async (req, res) => {
             return res.status(404).send("Project not found");
         }
 
-        res.json({project: updateProject});
+        res.status(200).json({project: updateProject});
 
     } catch (error) {
-        return res.status(400).send(error);
+        return res.status(400).send(error.message);
     }
 }
 
@@ -121,7 +121,7 @@ export const deleteProject = async (req, res) => {
         user.projects.pull(req.params.id);
         await user.save();
         
-        res.status(200).json("Project deleted successfully" );
+        res.status(200).json(`Project with ID ${req.params.id} has been deleted`);
 
     } catch (error) {
         next(error)

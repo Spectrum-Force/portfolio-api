@@ -2,7 +2,7 @@ import joi from "joi";
 
 export const educationSchema = joi.object(
     {
-        instutionName: joi.string().required(),
+        institutionName: joi.string().required(),
         location: joi.string(),
         program: joi.string().required(),
         qualification: joi.string().required(),

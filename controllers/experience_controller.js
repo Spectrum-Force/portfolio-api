@@ -67,14 +67,14 @@ export const getSingleExperience = async (req, res) => {
 }
 
 // Endpoint to update the details of an experience
-export const updateExperience = async (req, res, next) => {
+export const updateExperience = async (req, res) => {
     try {
 
-        const { error, value } = userProfileSchema.validate(req.body)
+        const { error, value } = experinceSchema.validate(req.body)
         if (error) {
             return res.status(400).send(error.details[0].message)
         }
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
         const user = await userModel.findById(userSessionId);
       if (!user) {
         return res.status(404).send("User not found");
@@ -88,7 +88,7 @@ export const updateExperience = async (req, res, next) => {
         res.status(200).json({experience: updateExperience})
 
     } catch (error) {
-        next(error)
+        return res.status(500).json({error})
     }
 }
 
@@ -103,7 +103,7 @@ export const deleteExperience = async (req, res, next) => {
         if (!deleteExperience) {
             return res.status(404).send('Experience not found')
         }
-        return res.status(200).json({ experience: deleteExperience })
+        return res.status(200).json(`Experience with ID ${req.params.id} has been deleted`)
 
     }
 

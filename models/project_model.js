@@ -2,7 +2,7 @@ import { Schema, model, Types } from 'mongoose';
 import { toJSON } from '@reis/mongoose-to-json';
 
 const projectSchema = new Schema({
-    // image: {type: String},
+    image: {type: String},
     projectName: { type: String },
     description: { type: String },
     contributors: { type: String },
