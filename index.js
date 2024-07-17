@@ -3,6 +3,7 @@ import mongoose from "mongoose";
 import session from "express-session";
 import MongoStore from "connect-mongo";
 import cors from "cors";
+import 'dotenv/config';
 import { dbConnection } from "./config/db.js";
 import { userRouter } from "./routers/user_routes.js";
 import { restartServer } from "./restart_server.js";
