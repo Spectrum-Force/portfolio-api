@@ -88,7 +88,7 @@ export const token = async (req, res, next) => {
         const token = jwt.sign(
             {id: user.id}, 
             process.env.JWT_PRIVATE_KEY,
-            {expiresIn: '1h'}
+            {expiresIn: '3h'}
         );
 
         // Return response
@@ -167,17 +167,3 @@ export const logout = async (req, res, next) => {
     }
 }
 
-export const profile = async (req, res, next) => {
-    try {
-        // Get user id from session or request
-        const id = req.session?.user?.id || req?.user?.id;
-        // Find a user by id
-        const user = await userModel
-            .findById(req.session.user.id)
-            .select({ password: false });
-        // Return response
-        return res.status(200).json(user)
-    } catch (error) {
-        next(error);
-    }
-}
