@@ -12,9 +12,9 @@ export const userProfileSchema = joi.object(
     dateOfBirth: joi.date(),
     contact: joi.string(),
     resume: joi.string(),    
-    github: joi.string().uri(),
-    linkedin: joi.string().uri(),
-    twitter: joi.string().uri(),
+    githubLink: joi.string().uri(),
+    linkedinLink: joi.string().uri(),
+    twitterLink: joi.string().uri(),
     user: joi.string()
 
 });

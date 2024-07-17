@@ -1,4 +1,5 @@
 import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken";
 import { userModel } from "../models/user_model.js";
 import { userSchema } from "../schema/user_schema.js";
 
@@ -57,6 +58,44 @@ export const login = async (req, res, next) => {
 
         // Return response
         return res.status(201).json('Login successful')
+
+
+    } catch (error) {
+        console.log(error)
+        next(error);
+    }
+}
+
+export const token = async (req, res, next) => {
+    try {
+        const { email, userName, password } = req.body
+        // Find a user using their unique identifier
+        const user = await userModel.findOne({
+            $or: [
+                { email },
+                { userName }
+            ]
+        });
+        if (!user) {
+            return res.status(401).json('No user found')
+        }
+        // Verify their password
+        const correctPassword = bcrypt.compareSync(password, user.password);
+        if (!correctPassword) {
+            return res.status(401).json('Invalid credentials')
+        }
+        // Generate a token
+        const token = jwt.sign(
+            {id: user.id}, 
+            process.env.JWT_PRIVATE_KEY,
+            {expiresIn: '3h'}
+        );
+
+        // Return response
+        return res.status(201).json({
+            message: 'User logged in',
+            accessToken: token
+        })
 
 
     } catch (error) {
@@ -128,15 +167,3 @@ export const logout = async (req, res, next) => {
     }
 }
 
-export const profile = async (req, res, next) => {
-    try {
-        // Find a user by id
-        const user = await userModel
-            .findById(req.session.user.id)
-            .select({ password: false });
-        // Return response
-        return res.status(200).json(user)
-    } catch (error) {
-        next(error);
-    }
-}
