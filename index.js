@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 5050
 
 // Apply middlewares
 app.use(express.json());
-app.use(cors({credentials: true, origin: 'http://localhost:5050'}));
+app.use(cors({credentials: true, origin: 'http://localhost:*'}));
 
 app.use(
     session({
