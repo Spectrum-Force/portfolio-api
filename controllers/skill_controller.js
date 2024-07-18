@@ -14,13 +14,22 @@ export const addSkill = async (req, res) => {
 
 
         // Find the user with the ID that was passed when the skill was being created
-        console.log('userId', req.session.user.id)
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user?.id;
 
-        const user = await userModel.findById(userSessionId);
+        const user = await userModel.findById(userSessionId).populate('skills');
         if(!user) {
             return res.status(404).send('User not found');
+        }
+
+        // Convert the skill name entered by the user to lower case
+        const skillNameLowerCase = value.name.toLowerCase();
+        // Compare that skill name with all existing skills for that user in the database
+        const skillExists = user.skills.some(skill => skill.name.toLowerCase() === skillNameLowerCase);
+
+        // Check if skills exists
+        if(skillExists) {
+            return res.status(400).send('This skill already exists')
         }
 
         // Create skill with the value
@@ -88,10 +97,10 @@ export const getSkills = async (req, res) => {
 
 export const getOneSkill = async (req, res, next) => {
     try {
-        const oneSkill = await skillModel.findById(req,params.id)
+        const oneSkill = await skillModel.findById(req.params.id)
         res.status(200).json({skill: oneSkill});
     } catch (error) {
-        next(error)
+        next(error.message)
     }
 }
 

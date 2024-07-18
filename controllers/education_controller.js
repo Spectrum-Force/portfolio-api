@@ -64,7 +64,7 @@ export const getSingleEducation = async (req, res) => {
         res.status(200).json(getSingleEducation);
 
     } catch (error) {
-        next(error);
+        next(error.message);
     }
 }
 

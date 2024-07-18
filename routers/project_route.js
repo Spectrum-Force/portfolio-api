@@ -11,7 +11,7 @@ projectRouter.get("/users/projects", checkUserSession, getProjects);
 
 projectRouter.get("/users/projects/:id", getOneProject);
 
-projectRouter.delete("/users/projects/:id", deleteProject);
+projectRouter.delete("/users/projects/:id", checkUserSession, deleteProject);
 
 projectRouter.patch("/users/projects/:id",  remoteUpload.single("image"), checkUserSession, updateProject);
 

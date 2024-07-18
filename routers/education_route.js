@@ -10,7 +10,7 @@ educationRouter.post("/users/education", checkUserSession, postEducation);
 
 educationRouter.get("/users/education", checkUserSession, getEducation);
 
-educationRouter.delete("/users/education/:id", deleteEducation);
+educationRouter.delete("/users/education/:id", checkUserSession, deleteEducation);
 
 educationRouter.patch("/users/education/:id", checkUserSession, updateEducation);
 

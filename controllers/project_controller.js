@@ -67,7 +67,7 @@ export const getOneProject = async (req, res) => {
         res.status(200).json(getSingleProject);
 
     } catch (error) {
-        return res.status(400).send(error);
+        return res.status(400).send(error.message);
     }
 }
 

@@ -13,6 +13,6 @@ experienceRouter.post("/users/experience", checkUserSession, addExperience);
 
 experienceRouter.patch("/users/experience/:id", checkUserSession, updateExperience);
 
-experienceRouter.delete("/users/experience/:id", deleteExperience);
+experienceRouter.delete("/users/experience/:id", checkUserSession, deleteExperience);
 
 export default experienceRouter;

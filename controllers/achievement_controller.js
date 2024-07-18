@@ -92,6 +92,7 @@ export const getAchievements = async (req, res) => {
 // Get an achievement by a unique id
 export const getOneAchievement = async (req, res, next) => {
     try {
+        
         const oneAchievement = await achievementModel.findById(req.params.id)
         res.status(200).json(oneAchievement);
     } catch (error) {

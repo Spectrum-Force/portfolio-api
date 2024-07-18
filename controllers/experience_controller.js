@@ -62,7 +62,7 @@ export const getSingleExperience = async (req, res) => {
         res.status(200).json(getSingleExperience)
 
     } catch (error) {
-        return res.status(500).send(error)
+        return res.status(500).send(error.message)
     }
 }
 

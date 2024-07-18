@@ -10,6 +10,6 @@ achievementRouter.get('/users/achievements', checkUserSession, getAchievements);
 achievementRouter.get('/users/achievements/:id', checkUserSession, getOneAchievement);
 achievementRouter.post('/users/achievements', remoteUpload.single("image"), checkUserSession, addAchievement);
 achievementRouter.patch('/users/achievements/:id', remoteUpload.single("image"), checkUserSession, patchAchievement);
-achievementRouter.delete('/users/achievements/:id', deleteAchievement);
+achievementRouter.delete('/users/achievements/:id', checkUserSession, deleteAchievement);
 
 export default achievementRouter
