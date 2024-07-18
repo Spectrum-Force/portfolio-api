@@ -83,9 +83,9 @@ export const getSkills = async (req, res) => {
         // we are fetching skills that belong to a particular user
         const userSessionId = req.session.user.id
         const allSkills = await skillModel.find({user: userSessionId});
-        if(allSkills.length == 0) {
-            return res.status(200).json({Skills: allSkills})
-        }
+        // if(allSkills.length == 0) {
+        //     return res.status(200).json({Skills: allSkills})
+        // }
         // Return all skills
         res.status(200).json({Skills: allSkills})
     } catch (error) {

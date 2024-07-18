@@ -79,9 +79,9 @@ export const getAchievements = async (req, res) => {
         const userSessionId = req.session?.user?.id || req?.user.id;
 
         const allAchievements = await achievementModel.find({ user: userSessionId })
-        if (allAchievements.length == 0) {
-            return res.status(200).json({ Achievements: allAchievements })
-        }
+        // if (allAchievements.length == 0) {
+        //     return res.status(200).json({ Achievements: allAchievements })
+        // }
         // Return all achievements
         res.status(200).json({ Achievements: allAchievements })
     } catch (error) {
