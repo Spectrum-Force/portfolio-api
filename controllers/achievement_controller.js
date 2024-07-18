@@ -80,7 +80,7 @@ export const getAchievements = async (req, res) => {
 
         const allAchievements = await achievementModel.find({ user: userSessionId })
         if (allAchievements.length == 0) {
-            return res.status(404).send('No achievement added')
+            return res.status(404).send({ Achievements: allAchievements })
         }
         // Return all achievements
         res.status(200).json({ Achievements: allAchievements })

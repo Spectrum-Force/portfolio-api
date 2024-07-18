@@ -47,7 +47,7 @@ export const getEducation = async (req, res) => {
         
 
         if (alleducation.length === 0) {
-            return res.status(404).send('No education added');
+            return res.status(404).send({ education: alleducation });
         }
         res.status(200).json({ education: alleducation })
 

@@ -92,7 +92,7 @@ export const updateProject = async (req, res) => {
 
         const updateProject = await projectModel.findByIdAndUpdate(req.params.id, value, { new: true });
         if (!updateProject) {
-            return res.status(404).send("Project not found");
+            return res.status(404).send({project: updateProject});
         }
 
         res.status(200).json({project: updateProject});

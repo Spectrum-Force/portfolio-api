@@ -45,7 +45,7 @@ export const getUserProfile = async (req, res) => {
         const userProfile = await userProfileModel.find({ user: userSessionId});
 
         if (!userProfile) {
-            return res.status(404).send('User Profile not found');
+            return res.status(404).send({profile: userProfile});
         }
         res.status(200).json({profile: userProfile})
        
