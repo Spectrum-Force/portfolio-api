@@ -25,7 +25,7 @@ export const addSkill = async (req, res) => {
         // Convert the skill name entered by the user to lower case
         const skillNameLowerCase = value.name.toLowerCase();
         // Compare that skill name with all existing skills for that user in the database
-        const skillExists = user.skills.some(skill => skill.name.toLowerCase() === skillNameLowerCase);
+        const skillExists = user.skills.find(skill => skill.name.toLowerCase() === skillNameLowerCase);
 
         // Check if skills exists
         if(skillExists) {
