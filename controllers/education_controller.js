@@ -15,7 +15,7 @@ export const postEducation = async (req, res) => {
         //after, find the user with the id that you passed when creating the education
         console.log('userId',req.session.user.id)
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
 
         const user = await userModel.findById(userSessionId);
         // Find the user in the database using the user ID from the session
@@ -45,7 +45,7 @@ export const getEducation = async (req, res) => {
     try {
 
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
         const alleducation = await educationModel.find({ user: userSessionId });
         
 
@@ -111,7 +111,7 @@ export const deleteEducation = async (req, res, next) => {
     try {
 
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
         const user = await userModel.findById(userSessionId);
         if (!user) {
             return res.status(404).send("User not found");

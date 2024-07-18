@@ -15,7 +15,7 @@ export const addAchievement = async (req, res) => {
             return res.status(400).send(error.details[0].message)
         }
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
 
         //after, find the user with the id that you passed when creating the education
         const user = await userModel.findById(userSessionId);
@@ -110,7 +110,7 @@ export const getOneAchievement = async (req, res, next) => {
 export const deleteAchievement = async (req, res) => {
     try {
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
         const user = await userModel.findById(userSessionId);
         if (!user) {
             return res.status(404).send("User not found");

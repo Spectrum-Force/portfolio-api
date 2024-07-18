@@ -15,7 +15,7 @@ export const addExperience = async (req, res) => {
             return res.status(400).send(error.details[0].message)
         }
 
-        const userSessionId=req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
 
         const user = await userModel.findById(userSessionId);
         if(!user) {
@@ -43,7 +43,7 @@ export const addExperience = async (req, res) => {
 export const getExperience = async (req, res) => {
     try {
 
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
        
         const allExperience = await experienceModel.find({ user: userSessionId })
 

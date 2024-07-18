@@ -88,7 +88,7 @@ export const getSkills = async (req, res) => {
     try {
 
         // we are fetching skills that belong to a particular user
-        const userSessionId = req.session.user.id
+        const userSessionId = req.session?.user?.id || req?.user.id;
         const allSkills = await skillModel.find({user: userSessionId});
         // if(allSkills.length == 0) {
         //     return res.status(200).json({Skills: allSkills})
@@ -115,7 +115,7 @@ export const getOneSkill = async (req, res, next) => {
 export const deleteSkill = async (req, res, next) => {
     try {
   
-        const userSessionId = req.session.user.id;
+        const userSessionId = req.session?.user?.id || req?.user.id;
         const user = await userModel.findById(userSessionId);
 
         if (!user) {
