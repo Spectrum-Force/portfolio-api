@@ -48,7 +48,7 @@ export const getProjects = async (req, res) => {
         const allProjects = await projectModel.find({ user: userSessionId });
 
         if (allProjects.length == 0) {
-            return res.status(404).json({Projects: allProjects});
+            return res.status(200).json({Projects: allProjects});
         }
         res.status(200).json({Projects: allProjects});
 

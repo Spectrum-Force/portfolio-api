@@ -47,7 +47,7 @@ export const getEducation = async (req, res) => {
         
 
         if (alleducation.length === 0) {
-            return res.status(404).json({ education: alleducation });
+            return res.status(200).json({ education: alleducation });
         }
         res.status(200).json({ education: alleducation })
 

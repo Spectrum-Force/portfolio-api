@@ -44,7 +44,7 @@ export const getExperience = async (req, res) => {
         const allExperience = await experienceModel.find({ user: userSessionId })
 
         if (allExperience.length == 0) {
-            return res.status(404).json({Experience: allExperience})
+            return res.status(200).json({Experience: allExperience})
         }
         res.status(200).json({ Experience: allExperience });
     } catch (error) {
