@@ -43,7 +43,10 @@ export const addSkill = async (req, res) => {
         await user.save();
 
         // return the skill
-        res.status(201).send({skill})
+        res.status(201).json ({
+            message: 'A skill has been added successfully',
+            skill: skill
+        })
 
     } catch (error) {
         return res.status(500).send(error)
@@ -70,7 +73,11 @@ export const patchSkill = async (req, res) => {
             return res.status(404).send('Skill not found');
         }
         // Return response
-        res.status(200).json({Skill: updatedSkill})
+        res.status(200).json ({
+            message: `Skill with ID ${req.params.id} has been updated successfully`,
+            Skill: updatedSkill
+        })
+    
     } catch (error) {
         return res.status(500).json(error.message)
     }

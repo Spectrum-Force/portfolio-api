@@ -29,7 +29,10 @@ export const addUserProfile = async (req, res) => {
 
         user.userProfile = profile._id;
         await user.save();
-        res.status(201).json({ profile })
+        res.status(201).json ({
+            message: 'A user profile has been added successfully',
+            profile: profile
+        });
 
     } catch (error) {
         return res.status(500).send(error);
@@ -81,7 +84,10 @@ export const updateUserProfile = async (req, res) => {
             return res.status(404).send('Profile not found');
         }
 
-        res.status(201).json({ profile: updatedUserProfile });
+        res.status(201).json ({
+            message: `Profile with ID ${req.params.id} has bewn updated successfully`,
+            profile: updatedUserProfile
+        });
 
     } catch (error) {
         return res.status(500).json(error.message);

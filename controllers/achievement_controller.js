@@ -6,11 +6,11 @@ import { userModel } from "../models/user_model.js";
 export const addAchievement = async (req, res) => {
     try {
 
-        const {error, value} = achievementSchema.validate({
+        const { error, value } = achievementSchema.validate({
             ...req.body,
             image: req.file.filename
         });
-        if(error){
+        if (error) {
 
             return res.status(400).send(error.details[0].message)
         }
@@ -38,7 +38,10 @@ export const addAchievement = async (req, res) => {
         await user.save();
 
         // return the achievement
-        res.status(201).json({ achievement })
+        res.status(200).json({
+            message: 'Achievement has been added successfully',
+            achievement: achievement
+        })
     } catch (error) {
         return res.status(500).send(error)
     }
@@ -66,7 +69,10 @@ export const patchAchievement = async (req, res) => {
             return res.status(404).send("Achievement not found");
         }
         // Return response
-        res.status(200).json({ achievement: updatedAchievement })
+        res.status(200).json({
+            message: 'The achievement has been updated successfully',
+            achievement: updatedAchievement
+        })
     } catch (error) {
         return res.status(500).json({ error })
     }
@@ -92,7 +98,7 @@ export const getAchievements = async (req, res) => {
 // Get an achievement by a unique id
 export const getOneAchievement = async (req, res, next) => {
     try {
-        
+
         const oneAchievement = await achievementModel.findById(req.params.id)
         res.status(200).json(oneAchievement);
     } catch (error) {
@@ -120,6 +126,6 @@ export const deleteAchievement = async (req, res) => {
 
         res.status(200).send(`Achievement with ID ${req.params.id} has been deleted`)
     } catch (error) {
-        return res.status(500).json({error})
+        return res.status(500).json({ error })
     }
 };

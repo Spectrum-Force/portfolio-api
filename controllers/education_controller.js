@@ -29,7 +29,10 @@ export const postEducation = async (req, res) => {
         // Add the ID of the newly created education document to the user's education array
         await user.save();
 
-        res.status(201).json({ education });
+        res.status(201).json({
+            message: 'Education has been added successfully',
+            Education: education
+        })
 
     } catch (error) {
         return res.status(500).send(error);
@@ -90,7 +93,10 @@ export const updateEducation = async (req, res) => {
             return res.status(404).send("Education not found");
         }
 
-        res.status(201).json({ Education });
+        res.status(201).json ({
+            message: 'Education has been updated successfully',
+            Education: Education
+        })
 
 
 

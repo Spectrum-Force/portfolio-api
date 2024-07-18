@@ -27,7 +27,11 @@ export const addExperience = async (req, res) => {
         user.experiences.push(experience._id);
         await user.save();
 
-        res.status(201).json({ experience });
+        res.status(201).json ({
+            message: 'Experience has been added successfully',
+            experience: experience
+        })
+
     }
 
     catch (error) {
@@ -85,7 +89,10 @@ export const updateExperience = async (req, res) => {
             return res.status(200).json('experience not found')
         }
 
-        res.status(200).json({experience: updateExperience})
+        res.status(200).json ({
+            message: 'Experience has been updated successfully',
+            experience: updateExperience
+        })
 
     } catch (error) {
         return res.status(500).json({error})

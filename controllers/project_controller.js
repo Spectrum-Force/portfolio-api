@@ -31,8 +31,11 @@ export const postProject = async (req, res) => {
         user.projects.push(project._id);
         await user.save();
 
-        res.status(201).json({ project });
-        console.log(project)
+        res.status(201).json ({
+            message: 'A project has been added successfully',
+            project: project
+        })
+
 
 
     } catch (error) {
@@ -95,7 +98,10 @@ export const updateProject = async (req, res) => {
             return res.status(404).send({project: updateProject});
         }
 
-        res.status(200).json({project: updateProject});
+        res.status(200).json ({
+            message: `Project with ID ${req.params.id} has been updated successfully`,
+            project: updateProject
+        })
 
     } catch (error) {
         return res.status(400).send(error.message);
