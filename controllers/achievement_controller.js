@@ -85,7 +85,7 @@ export const getAchievements = async (req, res) => {
         // Return all achievements
         res.status(200).json({ Achievements: allAchievements })
     } catch (error) {
-        return res.status(500).send('Internal error')
+        return res.status(500).json('Internal error')
     }
 }
 

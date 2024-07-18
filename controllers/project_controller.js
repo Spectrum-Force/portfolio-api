@@ -48,12 +48,12 @@ export const getProjects = async (req, res) => {
         const allProjects = await projectModel.find({ user: userSessionId });
 
         if (allProjects.length == 0) {
-            return res.status(404).json({ message: "No projects found" });
+            return res.status(404).json({Projects: allProjects});
         }
         res.status(200).json({Projects: allProjects});
 
     } catch (error) {
-        return res.status(400).send(error.message);
+        return res.status(400).json(error.message);
     }
 };
 

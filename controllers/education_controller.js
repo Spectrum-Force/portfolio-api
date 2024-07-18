@@ -47,12 +47,12 @@ export const getEducation = async (req, res) => {
         
 
         if (alleducation.length === 0) {
-            return res.status(404).send({ education: alleducation });
+            return res.status(404).json({ education: alleducation });
         }
         res.status(200).json({ education: alleducation })
 
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).json(error);
     }
 };
 

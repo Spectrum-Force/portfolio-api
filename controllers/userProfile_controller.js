@@ -45,13 +45,13 @@ export const getUserProfile = async (req, res) => {
         const userProfile = await userProfileModel.find({ user: userSessionId});
 
         if (!userProfile) {
-            return res.status(404).send({profile: userProfile});
+            return res.status(404).json({profile: userProfile});
         }
         res.status(200).json({profile: userProfile})
        
 
     } catch (error) {
-        return res.status(500).send(error.message)
+        return res.status(500).json(error.message)
     }
 };
 

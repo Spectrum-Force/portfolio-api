@@ -89,7 +89,7 @@ export const getSkills = async (req, res) => {
         // Return all skills
         res.status(200).json({Skills: allSkills})
     } catch (error) {
-        return res.status(500).send('Internal error')
+        return res.status(500).json('Internal error')
     }
 }
 
