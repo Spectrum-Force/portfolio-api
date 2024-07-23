@@ -10,22 +10,22 @@ export const addUserProfile = async (req, res) => {
 
         const { error, value } = userProfileSchema.validate({
             ...req.body,
-            profilePicture: req.files.profilePicture[0].filename,
-            resume: req.files.resume[0].filename,
+            profilePicture: req.files?.profilePicture[0].filename,
+            resume: req.files?.resume[0].filename,
         });
 
         if (error) {
             return res.status(400).send(error.details[0].message);
         }
 
-        const userSessionId = req.session?.user?.id || req?.user.id;
+        const userId = req.session?.user?.id || req?.user.id;
 
-        const user = await userModel.findById(userSessionId);
+        const user = await userModel.findById(userId);
         if (!user) {
             return res.status(404).send('User not found');
         }
 
-        const profile = await userProfileModel.create({ ...value, user: userSessionId });
+        const profile = await userProfileModel.create({ ...value, user: userId });
 
         user.userProfile = profile._id;
         await user.save();
@@ -44,8 +44,11 @@ export const addUserProfile = async (req, res) => {
 // Get a user profile by ID
 export const getUserProfile = async (req, res) => {
     try {
-        const userSessionId = req.session?.user?.id || req?.user.id;
-        const userProfile = await userProfileModel.find({ user: userSessionId});
+        const userId = req.session?.user?.id || req?.user.id;
+        const userProfile = await userProfileModel.find({ user: userId}).populate({
+            path: 'user',
+            select: '-password'
+        });
 
         if (!userProfile) {
             return res.status(200).json({profile: userProfile});
@@ -62,7 +65,8 @@ export const getUserProfile = async (req, res) => {
 export const updateUserProfile = async (req, res) => {
 
     try {
-        const { error, value } = userProfileSchema.validate({ ...req.body,
+        const { error, value } = userProfileSchema.validate({ 
+           ...req.body,
            profilePicture: req.files.profilePicture[0].filename,
            resume: req.files.resume[0].filename,
         }); 
@@ -71,9 +75,9 @@ export const updateUserProfile = async (req, res) => {
             return res.status(400).send(error.details[0].message);
         }
 
-        const userSessionId = req.session?.user?.id || req?.user.id;
+        const userId = req.session?.user?.id || req?.user.id;
 
-        const user = await userModel.findById(userSessionId);
+        const user = await userModel.findById(userId);
       if (!user) {
         return res.status(404).send("User not found");
       }
