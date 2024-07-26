@@ -127,7 +127,7 @@ export const deleteProject = async (req, res) => {
         user.projects.pull(req.params.id);
         await user.save();
         
-        res.status(200).json(`Project with ID ${req.params.id} has been deleted`);
+        res.status(200).json("Project has been deleted successfully");
 
     } catch (error) {
         next(error)
