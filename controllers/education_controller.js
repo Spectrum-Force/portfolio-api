@@ -13,7 +13,7 @@ export const postEducation = async (req, res) => {
         }
 
         //after, find the user with the id that you passed when creating the education
-        console.log('userId',req.session.user.id)
+        console.log('userId',req.session)
 
         const userId = req.session?.user?.id || req?.user.id;
 
