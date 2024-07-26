@@ -15,15 +15,15 @@ export const postEducation = async (req, res) => {
         //after, find the user with the id that you passed when creating the education
         console.log('userId',req.session.user.id)
 
-        const userSessionId = req.session?.user?.id || req?.user.id;
+        const userId = req.session?.user?.id || req?.user.id;
 
-        const user = await userModel.findById(userSessionId);
+        const user = await userModel.findById(userId);
         // Find the user in the database using the user ID from the session
         if (!user) {
             return res.status(404).send('User not found');
         }
 
-        const education = await educationModel.create({ ...value, user: userSessionId });
+        const education = await educationModel.create({ ...value, user: user });
         user.education.push(education._id);
 
         // Add the ID of the newly created education document to the user's education array
@@ -35,7 +35,7 @@ export const postEducation = async (req, res) => {
         })
 
     } catch (error) {
-        return res.status(500).send(error);
+        return res.status(500).send(error.message);
     }
 
 }
@@ -45,8 +45,8 @@ export const getEducation = async (req, res) => {
     try {
 
 
-        const userSessionId = req.session?.user?.id || req?.user.id;
-        const alleducation = await educationModel.find({ user: userSessionId });
+        const userId = req.session?.user?.id || req?.user.id;
+        const alleducation = await educationModel.find({ user: userId });
         
 
         // if (alleducation.length === 0) {
