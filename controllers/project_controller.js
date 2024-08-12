@@ -17,7 +17,7 @@ export const postProject = async (req, res) => {
 
         const userId = req.session?.user?.id || req?.user.id;
 
-        const user = await userModel.findById(userId);
+        const user = await userModel.findById(userId).populate('projects');
 
         if (!user) {
             return res.status(404).json({ message: "User not found" });

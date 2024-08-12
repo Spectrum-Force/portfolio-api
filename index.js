@@ -12,7 +12,7 @@ import skillRouter from "./routers/skills_routes.js";
 import educationRouter from "./routers/education_route.js";
 import projectRouter from "./routers/project_route.js";
 import experienceRouter from "./routers/experience_router.js";
-import expressOasGenerator from 'express-oas-generator';
+import expressOasGenerator from '@mickeymond/express-oas-generator';
 import userProfileRouter from "./routers/userProfile_route.js";
 
 // Create the express app
