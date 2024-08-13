@@ -48,7 +48,7 @@ export const getProjects = async (req, res) => {
     try {
 
         const userId = req.session?.user?.id || req?.user.id;
-        const allProjects = await projectModel.find({ user: userId });
+        const allProjects = await projectModel.find({ user: userId }).populate('user');
 
         // if (allProjects.length == 0) {
         //     return res.status(200).json({Projects: allProjects});
@@ -65,7 +65,7 @@ export const getProjects = async (req, res) => {
 
 export const getOneProject = async (req, res) => {
     try {
-        const getSingleProject = await projectModel.findById(req.params.id)
+        const getSingleProject = await projectModel.findById(req.params.id).populate('user');
         console.log(`Project with ID ${req.params.id} has been retrieved`)
         res.status(200).json(getSingleProject);
 
@@ -93,7 +93,7 @@ export const updateProject = async (req, res) => {
             return res.status(404).send("User not found")
         }
 
-        const updateProject = await projectModel.findByIdAndUpdate(req.params.id, value, { new: true });
+        const updateProject = await projectModel.findByIdAndUpdate(req.params.id, value, { new: true }).populate('user');
         if (!updateProject) {
             return res.status(404).send({project: updateProject});
         }
@@ -114,7 +114,7 @@ export const deleteProject = async (req, res) => {
     try {
 
         const userId = req.session?.user?.id || req?.user.id;
-        const user = await userModel.findById(userId);
+        const user = await userModel.findById(userId).populate('projects');
         if (!user) {
             return res.status(404).send("User not found");
         }
